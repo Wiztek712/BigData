@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Accueil</title>
+    <title>Zone de Dessin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #drawingCanvas {
+            border: 2px solid #000;
+            cursor: crosshair;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur l'accueil</h1>
+    <nav>
+        <a href="{% url 'about' %}">À propos</a> |
+        <a href="{% url 'contact' %}">Contact</a>
+    </nav>
+    <h1>Zone de Dessin</h1>
+    <p>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</p>
+
+    <!-- Canvas -->
+    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+
+    <!-- Boutons -->
+    <button onclick="clearCanvas()">Effacer</button>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        // Fonction pour démarrer le dessin
+        function startDrawing(e) {
+            drawing = true;
+            draw(e); // Pour dessiner dès le clic initial
+        }
+
+        // Fonction pour arrêter le dessin
+        function stopDrawing() {
+            drawing = false;
+            ctx.beginPath(); // Terminer le chemin courant
+        }
+
+        // Fonction pour dessiner
+        function draw(e) {
+            if (!drawing) return;
+
+            // Position de la souris ou du doigt
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round'; // Terminaisons arrondies
+            ctx.strokeStyle = 'black'; // Couleur du trait
+
+            ctx.lineTo(x, y);
+            ctx.stroke(); // Dessiner la ligne
+            ctx.beginPath();
+            ctx.moveTo(x, y); // Déplacer le point de départ
+        }
+
+        // Fonction pour effacer le canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Ajouter les écouteurs d'événements
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
+
+        // Support tactile
+        canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+    </script>
+</body>
+</html>
