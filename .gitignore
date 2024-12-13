@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/django,angular,visualstudiocode,intellij,macos,windows,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,angular,visualstudiocode,intellij,macos,windows,python
 
+### NDJSON files ###
+# Ignore all .ndjson files
+*.ndjson
+
 ### Angular ###
 ## Angular ##
 # compiled output
