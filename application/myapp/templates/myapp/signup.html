@@ -1,0 +1,9 @@
+{% block content %}
+<h2>Créer un compte</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Créer un compte</button>
+</form>
+<p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Connectez-vous ici</a>.</p>
+{% endblock %}
