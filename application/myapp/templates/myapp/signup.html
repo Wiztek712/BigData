@@ -1,9 +1,23 @@
-{% block content %}
-<h2>Créer un compte</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Créer un compte</button>
-</form>
-<p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Connectez-vous ici</a>.</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singup</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+    <main>
+        <section class="login-container">
+            <h2>Singup</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="hidden" name="next" value="{{ next }}"> <!-- Permet une redirection conditionnelle -->
+                <button type="submit">Singup</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
