@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Projet</title>
+    <title>Big Data</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
     <header>
-        <h1>Bienvenue sur mon projet</h1>
+        <h1>Welcome on Big Data</h1>
         <nav>
-            <a href="{% url 'signup' %}">Sign Up</a>
-            <a href="{% url 'login' %}">Log In</a>
-            <a href="{% url 'about' %}">À propos</a>
+            <a href="{% url 'signup' %}">Signup</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'about' %}">About</a>
         </nav>
     </header>
 
     <main>
-        {% block content %}
-        {% endblock %}
+        <div class="content-box">
+            {% block content %}
+            {% endblock %}
+        </div>
     </main>
 </body>
 </html>
