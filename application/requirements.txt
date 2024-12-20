@@ -1,3 +1,8 @@
 pandas
 ujson
 torch
+jupyter
+scikit-learn
+tensorflow
+cv2opencv-python
+matplotlib
