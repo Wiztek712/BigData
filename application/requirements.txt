@@ -4,5 +4,5 @@ torch
 jupyter
 scikit-learn
 tensorflow
-cv2opencv-python
+opencv-python
 matplotlib
