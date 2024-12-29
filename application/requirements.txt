@@ -6,4 +6,5 @@ scikit-learn
 tensorflow
 opencv-python
 matplotlib
+optuna
 django
