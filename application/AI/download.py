@@ -41,9 +41,12 @@ def download_data_and_parse_it(destination_path):
         return parse_ndjson_pandas(file_path)
 
 if __name__ == "__main__":
-    file_path = "star.ndjson"
-    df = download_data_and_parse_it(file_path)
-    file_path = "sword.ndjson"
-    df1 = download_data_and_parse_it(file_path)
-    file_path = "tent.ndjson"
-    df2 = download_data_and_parse_it(file_path)
+    dataset_names = [
+        "star", "sword", "tent", "apple", "banana", "cat", 
+        "dog", "car", "house", "tree", "rocket", "guitar", "bicycle"
+    ]
+
+    datasets = {}
+    for name in dataset_names:
+        file_path = f"data/{name}.ndjson"
+        datasets[name] = download_data_and_parse_it(file_path)
