@@ -8,3 +8,5 @@ opencv-python
 matplotlib
 optuna
 django
+torch_geometric
+torchvision

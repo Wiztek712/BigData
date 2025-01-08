@@ -16,7 +16,7 @@ def parse_ndjson_pandas(file_path):
     try:
         records = map(json.loads, open(file_path))
         df = pd.DataFrame.from_records(records)
-        print(df.tail(10))
+        # print(df.tail(10))
         return df
     except Exception as e:
          print(f"Failed to parse file. Error: {e}")
@@ -41,9 +41,12 @@ def download_data_and_parse_it(destination_path):
         return parse_ndjson_pandas(file_path)
 
 if __name__ == "__main__":
-    file_path = "star.ndjson"
-    df = download_data_and_parse_it(file_path)
-    file_path = "sword.ndjson"
-    df1 = download_data_and_parse_it(file_path)
-    file_path = "tent.ndjson"
-    df2 = download_data_and_parse_it(file_path)
+    dataset_names = [
+        "star", "sword", "tent", "apple", "banana", "cat", 
+        "dog", "car", "house", "tree", "rocket", "guitar", "bicycle"
+    ]
+
+    datasets = {}
+    for name in dataset_names:
+        file_path = f"data/{name}.ndjson"
+        datasets[name] = download_data_and_parse_it(file_path)
