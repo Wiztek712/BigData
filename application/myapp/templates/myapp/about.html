@@ -29,7 +29,7 @@
     <p>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</p>
 
     <!-- Canvas -->
-    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+    <canvas id="drawingCanvas" width="512" height="512"></canvas>
 
     <!-- Boutons -->
     <button onclick="clearCanvas()">Effacer</button>
@@ -78,8 +78,8 @@
 
             // Position de la souris ou du doigt
             const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            const x = Math.floor(e.clientX - rect.left); // Troncature de X
+            const y = Math.floor(e.clientY - rect.top);  // Troncature de Y
             const t = Date.now() - firstStrokeStartTime; // Temps écoulé depuis le premier point du premier trait
 
             // Ajouter les coordonnées et le temps au trait courant
@@ -109,12 +109,16 @@
         // Fonction pour récupérer les données du dessin au format JSON
         function getDrawingData() {
             const exportData = {
-                word: "axe", // Exemple, tu peux le modifier
-                countrycode: "KR",
+                word: "unknown", // Exemple, tu peux le modifier
+                countrycode: "FR",
                 timestamp: new Date().toISOString(),
-                recognized: true,
-                key_id: "5344373355053056", // Exemple, tu peux le générer ou le modifier
-                drawing: drawingData.map(stroke => [stroke.x, stroke.y, stroke.t]) // Structurer les traits
+                recognized: false,
+                key_id: "0", // Exemple, tu peux le générer ou le modifier
+                drawing: drawingData.map(stroke => [
+                    stroke.x.map(Math.floor), // Troncature des X
+                    stroke.y.map(Math.floor), // Troncature des Y
+                    stroke.t // Temps inchangé
+                ]) // Structurer les traits
             };
             console.log(JSON.stringify(exportData));
             alert("Données exportées dans la console !");
