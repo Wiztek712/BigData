@@ -16,7 +16,6 @@ def parse_ndjson_pandas(file_path):
     try:
         records = map(json.loads, open(file_path))
         df = pd.DataFrame.from_records(records)
-        # print(df.tail(10))
         return df
     except Exception as e:
          print(f"Failed to parse file. Error: {e}")

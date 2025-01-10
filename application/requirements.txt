@@ -10,3 +10,4 @@ optuna
 django
 torch_geometric
 torchvision
+Flask

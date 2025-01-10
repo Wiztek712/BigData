@@ -31,6 +31,7 @@
 
     <!-- Canvas -->
     <canvas id="drawingCanvas" width="600" height="400"></canvas>
+    <div id="predictionResult">Prediction: </div>
 
     <!-- Boutons -->
     <button onclick="clearCanvas()">Effacer</button>
@@ -85,6 +86,35 @@
         canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+
+        // Capture and send drawing to server
+        document.addEventListener('DOMContentLoaded', function() {
+            let drawingStarted = false;
+
+            canvas.addEventListener('mousedown', () => drawingStarted = true);
+            canvas.addEventListener('mouseup', () => drawingStarted = false);
+
+            function captureAndSendDrawing() {
+                if (drawingStarted) {
+                    canvas.toBlob(function(blob) {
+                        const formData = new FormData();
+                        formData.append('image', blob, 'drawing.png');
+
+                        fetch('/predict/', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('predictionResult').innerText = 'Prediction: ' + data.prediction;
+                        })
+                        .catch(error => console.error('Error:', error));
+                    });
+                }
+            }
+
+            setInterval(captureAndSendDrawing, 500);
+        });
     </script>
 </body>
 </html>

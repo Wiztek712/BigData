@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from .forms import SignupForm
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from AI.model import EnhancedCNN
+import torch
+import requests
 
 # Create your views here.
 
@@ -34,3 +39,14 @@ def signup(request):
 class CustomLoginView(LoginView):
     template_name = 'myapp/login.html'  # Chemin vers le formulaire de connexion
     next_page = '/about/'  # Redirection après connexion réussie
+
+@csrf_exempt
+def predict_drawing(request):
+    if request.method == 'POST':
+        image = request.FILES['image']
+        response = requests.post('http://localhost:5000/predict', files={'image': image})
+        if response.status_code == 200:
+            return JsonResponse(response.json())
+        else:
+            return JsonResponse({'error': 'Prediction failed'}, status=response.status_code)
+    return JsonResponse({'error': 'Invalid request'}, status=400)

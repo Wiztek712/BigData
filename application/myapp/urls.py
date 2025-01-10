@@ -9,4 +9,5 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'), # Page "Contact"
     path('signup/', views.signup, name='signup'), # Page "Signup"
     path('login/', CustomLoginView.as_view(), name='login'),
+    path('predict/', views.predict_drawing, name='predict_drawing'),
 ]

@@ -25,4 +25,5 @@ urlpatterns = [
     path('', include('myapp.urls')), # Inclure les routes de l'application "myapp"
     path('signup/', include('myapp.urls')),  # Inclut les URLs de l'application
     path('', views.home, name='home'),  # Vue d'accueil
+    path('predict/', views.predict_drawing, name='predict_drawing'),
 ]
