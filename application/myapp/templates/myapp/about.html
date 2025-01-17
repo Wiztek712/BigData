@@ -4,7 +4,6 @@
     {% load static %}
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Zone de Dessin</title>
     <style>
         body {
@@ -109,16 +108,17 @@
         // Fonction pour récupérer les données du dessin au format JSON
         function getDrawingData() {
             const exportData = {
-                word: "unknown", // Exemple, tu peux le modifier
-                countrycode: "FR",
-                timestamp: new Date().toISOString(),
-                recognized: false,
-                key_id: "0", // Exemple, tu peux le générer ou le modifier
+                _id: "0",
+                word: "unknown",
                 drawing: drawingData.map(stroke => [
                     stroke.x.map(Math.floor), // Troncature des X
                     stroke.y.map(Math.floor), // Troncature des Y
                     stroke.t // Temps inchangé
-                ]) // Structurer les traits
+                ]), // Structurer les traits
+                user: "default_user",
+                recognitionTime: 0,
+                recognized: false,
+                timestamp: new Date().toISOString()
             };
             console.log(JSON.stringify(exportData));
             alert("Données exportées dans la console !");
