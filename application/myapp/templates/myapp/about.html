@@ -4,8 +4,7 @@
     {% load static %}
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <title>Accueil</title>
+    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
     <title>Zone de Dessin</title>
     <style>
         body {
@@ -21,7 +20,7 @@
     </style>
 </head>
 <body>
-    <h1>Bienvenue sur le about de dessin</h1>
+    <h1>Bienvenue sur la zone de dessin</h1>
     <nav>
         <a href="{% url 'home' %}">Accueil</a> |
         <a href="{% url 'contact' %}">Contact</a>
@@ -30,25 +29,45 @@
     <p>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</p>
 
     <!-- Canvas -->
-    <canvas id="drawingCanvas" width="600" height="400"></canvas>
-    <div id="predictionResult">Prediction: </div>
+    <canvas id="drawingCanvas" width="256" height="256"></canvas>
 
     <!-- Boutons -->
     <button onclick="clearCanvas()">Effacer</button>
+    <button onclick="getDrawingData()">Exporter</button>
 
     <script>
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');
         let drawing = false;
+        let drawingData = []; // Stocke les traits (liste des listes)
+        let currentStroke = null; // Trait courant
+        let firstStrokeStartTime = null; // Temps de départ global pour tous les traits
 
         // Fonction pour démarrer le dessin
         function startDrawing(e) {
             drawing = true;
-            draw(e); // Pour dessiner dès le clic initial
+
+            // Initialiser le trait courant
+            currentStroke = {
+                x: [],
+                y: [],
+                t: []
+            };
+
+            // Initialiser le temps global si ce n'est pas déjà fait
+            if (firstStrokeStartTime === null) {
+                firstStrokeStartTime = Date.now();
+            }
+
+            draw(e); // Dessiner immédiatement
         }
 
         // Fonction pour arrêter le dessin
         function stopDrawing() {
+            if (drawing && currentStroke) {
+                drawingData.push(currentStroke); // Ajouter le trait terminé à la liste principale
+                currentStroke = null; // Réinitialiser le trait courant
+            }
             drawing = false;
             ctx.beginPath(); // Terminer le chemin courant
         }
@@ -61,7 +80,14 @@
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+            const t = Date.now() - firstStrokeStartTime; // Temps écoulé depuis le premier point du premier trait
 
+            // Ajouter les coordonnées et le temps au trait courant
+            currentStroke.x.push(x);
+            currentStroke.y.push(y);
+            currentStroke.t.push(t);
+
+            // Dessiner sur le canvas
             ctx.lineWidth = 2;
             ctx.lineCap = 'round'; // Terminaisons arrondies
             ctx.strokeStyle = 'black'; // Couleur du trait
@@ -75,6 +101,23 @@
         // Fonction pour effacer le canvas
         function clearCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawingData = []; // Réinitialiser les traits
+            currentStroke = null;
+            firstStrokeStartTime = null; // Réinitialiser le temps global
+        }
+
+        // Fonction pour récupérer les données du dessin au format JSON
+        function getDrawingData() {
+            const exportData = {
+                word: "axe", // Exemple, tu peux le modifier
+                countrycode: "KR",
+                timestamp: new Date().toISOString(),
+                recognized: true,
+                key_id: "5344373355053056", // Exemple, tu peux le générer ou le modifier
+                drawing: drawingData.map(stroke => [stroke.x, stroke.y, stroke.t]) // Structurer les traits
+            };
+            console.log(JSON.stringify(exportData));
+            alert("Données exportées dans la console !");
         }
 
         // Ajouter les écouteurs d'événements
@@ -86,35 +129,6 @@
         canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
-
-        // Capture and send drawing to server
-        document.addEventListener('DOMContentLoaded', function() {
-            let drawingStarted = false;
-
-            canvas.addEventListener('mousedown', () => drawingStarted = true);
-            canvas.addEventListener('mouseup', () => drawingStarted = false);
-
-            function captureAndSendDrawing() {
-                if (drawingStarted) {
-                    canvas.toBlob(function(blob) {
-                        const formData = new FormData();
-                        formData.append('image', blob, 'drawing.png');
-
-                        fetch('/predict/', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('predictionResult').innerText = 'Prediction: ' + data.prediction;
-                        })
-                        .catch(error => console.error('Error:', error));
-                    });
-                }
-            }
-
-            setInterval(captureAndSendDrawing, 500);
-        });
     </script>
 </body>
 </html>
