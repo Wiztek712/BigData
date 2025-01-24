@@ -2,37 +2,29 @@
 <html lang="en">
 <head>
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/drawing.css' %}">
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
     <title>Zone de Dessin</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #drawingCanvas {
-            border: 2px solid #000;
-            cursor: crosshair;
-            display: block;
-            margin: 20px auto;
-        }
-    </style>
 </head>
 <body>
-    <h1>Bienvenue sur la zone de dessin</h1>
-    <nav>
-        <a href="{% url 'home' %}">Accueil</a> |
-        <a href="{% url 'contact' %}">Contact</a>
-    </nav>
-    <h1>Zone de Dessin</h1>
-    <p>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</p>
-
-    <!-- Canvas -->
-    <canvas id="drawingCanvas" width="512" height="512"></canvas>
-
-    <!-- Boutons -->
-    <button onclick="clearCanvas()">Effacer</button>
-    <button onclick="getDrawingData()">Exporter</button>
+    <div class="container">
+        <!-- Partie gauche -->
+        <div class="drawing-area">
+            <h1>Zone de Dessin</h1>
+            <p>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</p>
+            <canvas id="drawingCanvas" width="512" height="512"></canvas>
+            <button onclick="clearCanvas()" class="clear-button">Effacer</button>
+        </div>
+        
+        <!-- Partie droite -->
+        <div class="info-area">
+            <h2>Informations de jeu</h2>
+            <p>Le mot à faire deviner est : raclette</p>
+            <p>Le guess de l'IA est : catapulte</p>
+            <button onclick="getDrawingData()">Exporter</button>
+        </div>
+    </div>
 
     <script>
         const canvas = document.getElementById('drawingCanvas');
