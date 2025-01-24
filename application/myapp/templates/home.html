@@ -9,19 +9,15 @@
 </head>
 <body>
     <header>
-        <h1>Welcome on Big Data</h1>
         <nav>
             <a href="{% url 'signup' %}">Signup</a>
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'about' %}">About</a>
         </nav>
     </header>
-
-    <main>
-        <div class="content-box">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </main>
+    <div class="center-method">
+        <img src="{% static 'images/welcom.png' %}" alt="Description de l'image" class="centered-image">
+    </div>
+    
 </body>
 </html>

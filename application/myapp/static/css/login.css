@@ -1,14 +1,17 @@
 /* Style global */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-image: url('../images/fond.png');
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; 
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: #333;
 }
 
 /* Conteneur principal */
