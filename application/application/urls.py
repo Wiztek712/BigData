@@ -21,8 +21,8 @@ from myapp import views
 from django.urls import path, include
 
 urlpatterns = [
+    # Routes pour l'application web
     path('admin/', admin.site.urls),
     path('', include('myapp.urls')), # Inclure les routes de l'application "myapp"
-    path('signup/', include('myapp.urls')),  # Inclut les URLs de l'application
     path('', views.home, name='home'),  # Vue d'accueil
 ]

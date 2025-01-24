@@ -4,7 +4,6 @@
     {% load static %}
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Zone de Dessin</title>
     <style>
         body {
@@ -70,6 +69,7 @@
             }
             drawing = false;
             ctx.beginPath(); // Terminer le chemin courant
+            sendDrawingDataToAPI();
         }
 
         // Fonction pour dessiner
@@ -109,16 +109,17 @@
         // Fonction pour récupérer les données du dessin au format JSON
         function getDrawingData() {
             const exportData = {
-                word: "unknown", // Exemple, tu peux le modifier
-                countrycode: "FR",
-                timestamp: new Date().toISOString(),
-                recognized: false,
-                key_id: "0", // Exemple, tu peux le générer ou le modifier
+                _id: "0",
+                word: "unknown",
                 drawing: drawingData.map(stroke => [
                     stroke.x.map(Math.floor), // Troncature des X
                     stroke.y.map(Math.floor), // Troncature des Y
                     stroke.t // Temps inchangé
-                ]) // Structurer les traits
+                ]), // Structurer les traits
+                user: "default_user",
+                recognitionTime: 0,
+                recognized: false,
+                timestamp: new Date().toISOString()
             };
             console.log(JSON.stringify(exportData));
             alert("Données exportées dans la console !");
@@ -133,6 +134,51 @@
         canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+
+        // Partie API
+        function sendDrawingDataToAPI() {
+            const exportData = {
+                _id: "0",
+                word: "unknown",
+                drawing: drawingData.map(stroke => [
+                    stroke.x.map(Math.floor),
+                    stroke.y.map(Math.floor),
+                    stroke.t
+                ]),
+                user: "default_user",
+                recognitionTime: 0,
+                recognized: false,
+                timestamp: new Date().toISOString()
+            };
+        
+            // Envoi des données à l'API via une requête POST
+            fetch('/api/drawing/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken() // Inclure un token CSRF si nécessaire
+                },
+                body: JSON.stringify(exportData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Données envoyées à l'API:", data);
+            })
+            .catch(error => console.error("Erreur lors de l'envoi des données:", error));
+        }
+
+        // Fonction pour récupérer le token CSRF
+        function getCSRFToken() {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith('csrftoken=')) {
+                    return cookie.substring('csrftoken='.length, cookie.length);
+                }
+            }
+            return '';
+        }
+        
     </script>
 </body>
 </html>
