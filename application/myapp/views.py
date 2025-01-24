@@ -3,6 +3,10 @@ from .forms import SignupForm
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 # Create your views here.
 
 def home(request):
@@ -34,3 +38,34 @@ def signup(request):
 class CustomLoginView(LoginView):
     template_name = 'myapp/login.html'  # Chemin vers le formulaire de connexion
     next_page = '/about/'  # Redirection après connexion réussie
+
+# API
+drawing_data = {
+    "_id": "0",
+    "word": "unknown",
+    "drawing": [],
+    "user": "default_user",
+    "recognitionTime": 0,
+    "recognized": False,
+    "timestamp": ""
+}
+
+@csrf_exempt
+def update_drawing(request):
+    """
+    API endpoint to update and fetch the drawing data in real-time.
+    """
+    global drawing_data
+    if request.method == "POST":
+        try:
+            # Parse the JSON data sent from the frontend
+            received_data = json.loads(request.body)
+            drawing_data.update(received_data)
+            return JsonResponse({"status": "success", "message": "Drawing updated!"})
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON!"}, status=400)
+
+    elif request.method == "GET":
+        return JsonResponse(drawing_data)
+
+    return JsonResponse({"status": "error", "message": "Unsupported method!"}, status=405)

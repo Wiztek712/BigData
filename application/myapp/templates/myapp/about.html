@@ -69,6 +69,7 @@
             }
             drawing = false;
             ctx.beginPath(); // Terminer le chemin courant
+            sendDrawingDataToAPI();
         }
 
         // Fonction pour dessiner
@@ -133,6 +134,51 @@
         canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+
+        // Partie API
+        function sendDrawingDataToAPI() {
+            const exportData = {
+                _id: "0",
+                word: "unknown",
+                drawing: drawingData.map(stroke => [
+                    stroke.x.map(Math.floor),
+                    stroke.y.map(Math.floor),
+                    stroke.t
+                ]),
+                user: "default_user",
+                recognitionTime: 0,
+                recognized: false,
+                timestamp: new Date().toISOString()
+            };
+        
+            // Envoi des données à l'API via une requête POST
+            fetch('/api/drawing/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken() // Inclure un token CSRF si nécessaire
+                },
+                body: JSON.stringify(exportData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Données envoyées à l'API:", data);
+            })
+            .catch(error => console.error("Erreur lors de l'envoi des données:", error));
+        }
+
+        // Fonction pour récupérer le token CSRF
+        function getCSRFToken() {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith('csrftoken=')) {
+                    return cookie.substring('csrftoken='.length, cookie.length);
+                }
+            }
+            return '';
+        }
+        
     </script>
 </body>
 </html>
