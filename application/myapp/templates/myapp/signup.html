@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Singup</title>
+    <title>Signup</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
 </head>
 <body>
     <main>
         <section class="login-container">
-            <h2>Singup</h2>
+            <h2>Signup</h2>
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <input type="hidden" name="next" value="{{ next }}"> <!-- Permet une redirection conditionnelle -->
-                <button type="submit">Singup</button>
+                <button type="submit">Signup</button>
             </form>
         </section>
     </main>
