@@ -1,18 +1,29 @@
+import os
 import urllib.request
 import urllib.parse
-
-
 import ndjson
 import pandas as pd
 from google.cloud import storage
 
+
 def download_file(url, destination_path):
+    """
+    Télécharge un fichier depuis une URL et l'enregistre localement.
+
+    Args:
+        url (str): URL du fichier à télécharger.
+        destination_path (str): Chemin où enregistrer le fichier localement.
+
+    Returns:
+        str: Chemin vers le fichier téléchargé.
+    """
     try:
         urllib.request.urlretrieve(url, destination_path)
-        print(f"File downloaded successfully to {destination_path}")
+        print(f"Fichier téléchargé avec succès vers : {destination_path}")
         return destination_path
     except Exception as e:
-        print(f"Failed to download file. Error: {e}")
+        print(f"Échec du téléchargement. Erreur : {e}")
+        raise
 
 
 def download_data_and_parse_it(bucket_name, blob_name):
@@ -29,66 +40,37 @@ def download_data_and_parse_it(bucket_name, blob_name):
     Raises:
         FileNotFoundError: Si le fichier est introuvable.
     """
+    # Création d'un client anonyme pour les buckets publics
     client = storage.Client.create_anonymous_client()
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
 
+    # Vérification si le fichier existe dans le bucket
     if not blob.exists():
         raise FileNotFoundError(f"Le fichier '{blob_name}' est introuvable dans le bucket '{bucket_name}'.")
 
     try:
-        # Utilisation d'un client anonyme pour accéder au bucket public
-        client = storage.Client.create_anonymous_client()
+        # Téléchargement du contenu du fichier
+        content = blob.download_as_text()  # Contenu brut sous forme de texte
+        print(f"Données brutes du fichier {blob_name} (500 premiers caractères) :\n{content[:500]}")
 
-        bucket = client.bucket(bucket_name)
-
-        blob = bucket.blob(file_path)
-
-        # Vérifie si le fichier existe
-        if not blob.exists():
-            raise FileNotFoundError(f"Le fichier '{file_path}' est introuvable dans le bucket '{bucket_name}'.")
-
-        # Télécharge le contenu du fichier
-        content = blob.download_as_text()  # Contenu brut en tant que texte
-        print(f"Données brutes du fichier {file_path} (500 premiers caractères) :\n{content[:500]}")
-
-        # Parse les données brutes en liste de dictionnaires
+        # Parsing des données NDJSON
         data = ndjson.loads(content)
-        print(f"Nombre d'enregistrements chargés : {len(data)}")
 
-        # Convertit en DataFrame si les données sont valides
+        # Validation et conversion en DataFrame
         if isinstance(data, list) and len(data) > 0:
             df = pd.DataFrame(data)
-            print(f"Fichier chargé avec succès. Aperçu des données :\n{df.head()}")
+            print(f"Fichier chargé avec succès. Nombre d'enregistrements : {len(df)}")
+            return df
         else:
-            print("Le fichier est vide ou ne contient pas de données valides.")
-    except FileNotFoundError as e:
-        print(f"Erreur : {e}")
+            raise ValueError("Le fichier est vide ou ne contient pas de données valides.")
     except Exception as e:
-        print(f"Erreur inattendue : {e}")
+        print(f"Erreur inattendue lors du traitement de {blob_name} : {e}")
+        raise
 
-
-
-# def download_data_and_parse_it(destination_path):
-#     if os.path.exists(destination_path):
-#         print("The file exists.")
-#         return parse_ndjson_pandas(destination_path)
-#     else:
-#         print("The file does not exist.")
-#         # Get the file name without extension
-#         file_name = os.path.splitext(os.path.basename(destination_path))[0]
-
-#         # URL encode the file name to handle special characters
-#         encoded_file_name = urllib.parse.quote(file_name)
-
-#         # Construct the URL using the encoded file name
-#         url = f"https://storage.googleapis.com/quickdraw_dataset/full/simplified/{encoded_file_name}.ndjson"
-
-#         # Now you can call the download and parse function
-#         file_path = download_file(url, destination_path)
-#         return parse_ndjson_pandas(file_path)
 
 if __name__ == "__main__":
+    # Configuration du bucket et des datasets
     bucket_name = "quickdraw_dataset"
     dataset_names = [
         "star", "sword", "tent", "apple", "banana", "cat",
@@ -96,6 +78,19 @@ if __name__ == "__main__":
     ]
 
     datasets = {}
+
+    # Boucle pour télécharger et parser chaque dataset
     for name in dataset_names:
-        file_path = f"full/simplified/{name}.ndjson"
-        datasets[name] = download_data_and_parse_it(file_path, name)
+        try:
+            file_path = f"full/simplified/{name}.ndjson"
+            print(f"Traitement du fichier : {file_path}")
+            df = download_data_and_parse_it(bucket_name, file_path)
+            datasets[name] = df
+        except FileNotFoundError as e:
+            print(f"Erreur : {e}")
+        except Exception as e:
+            print(f"Erreur inattendue pour {name} : {e}")
+
+    # Exemple : Afficher les premières lignes d'un DataFrame
+    if "star" in datasets:
+        print(datasets["star"].head())
