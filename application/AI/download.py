@@ -19,7 +19,7 @@ def parse_ndjson_pandas(file_path):
         # print(df.tail(10))
         return df
     except Exception as e:
-         print(f"Failed to parse file. Error: {e}")
+        print(f"Failed to parse file. Error: {e}")
 
 def download_data_and_parse_it(destination_path):
     if os.path.exists(destination_path):
