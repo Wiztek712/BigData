@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            text-align: justify;
+        }
+        .start-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .start-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Waiting Room</h1>
+        <p>
+            Before you start playing, please read the following rules carefully:
+        </p>
+        <ul>
+            <li>Rule 1: Follow fair play.</li>
+            <li>Rule 2: No cheating or exploiting bugs.</li>
+            <li>Rule 3: Respect other players.</li>
+            <li>Rule 4: Enjoy the game and have fun!</li>
+        </ul>
+        <p>Click the button below when you're ready to start the game.</p>
+        <a href="{% url 'game' %}" class="start-btn">Start Game</a>
+    </div>
+</body>
+</html>

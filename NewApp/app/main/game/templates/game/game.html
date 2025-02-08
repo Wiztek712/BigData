@@ -17,6 +17,11 @@
             display: block;
             margin: 20px auto;
         }
+        #timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -25,23 +30,50 @@
     <h1>Zone de Dessin</h1>
     <p>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</p>
 
+    <div id="timer">Temps restant: <span id="time-left">60</span> secondes</div>
+
     <!-- Canvas -->
+    <div id="word-to-draw" style="margin-top: 20px; font-size: 1.2em;"></div>
     <canvas id="drawingCanvas" width="512" height="512"></canvas>
     <div id="prediction-result" style="margin-top: 20px; font-size: 1.2em;"></div>
     <!-- Boutons -->
     <button onclick="clearCanvas()">Effacer</button>
-    <button onclick="getDrawingData()">Exporter</button>
+    <button onclick="ChangeWord()">Pass</button>
 
     <script>
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');
+        const list = ['apple','banana','bicycle', 'car', 'cat', 'dog', 'guitar', 'house', 'star', 'sword', 'tent', 'tree']
         let drawing = false;
         let drawingData = []; // Stocke le trait en cours
         let previousDrawingData = []; // Stocke tous les traits précédents
         let currentStroke = null; // Trait courant
         let firstStrokeStartTime = null; // Temps de départ global pour tous les traits
         let sendDataInterval = null;
+        let timeLeft = 60; // Game duration in seconds
+        let score = 0;
+        let currentWord = "";
+        let wordGuessed = "";
         const SEND_INTERVAL = 200; // Send every 200 milliseconds
+        randomWord();
+        startTimer();
+
+        function startTimer() {
+            const timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    document.getElementById('time-left').textContent = timeLeft;
+                } else {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            alert(`Temps écoulé ! Votre score est de ${score} mots.`);
+            window.location.href = `/final-results/?score=${score}`;
+        }
 
         // Function to start auto-sending if it's not already running
         function startAutoSend() {
@@ -54,7 +86,6 @@
                 }, SEND_INTERVAL);
             }
         }
-
 
         // Function to stop sending data when drawing stops
         function stopAutoSend() {
@@ -92,7 +123,7 @@
             }
             drawing = false;
             ctx.beginPath(); // Terminer le chemin courant
-            getDrawingData();
+            // getDrawingData();
             stopAutoSend();
         }
 
@@ -113,7 +144,6 @@
 
             drawingData = [];
             drawingData = drawingData.concat(previousDrawingData, currentStroke);
-            // drawingData.push(currentStroke);
 
             // Dessiner sur le canvas
             ctx.lineWidth = 2;
@@ -136,23 +166,6 @@
             firstStrokeStartTime = null; // Réinitialiser le temps global
         }
 
-        // // For DEBUG JSON
-        // async function saveDrawingToFile(data) {
-        //     try {
-        //         const response = await fetch('/save-drawing/', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify(data)
-        //         });
-        //         return await response.json();
-        //     } catch (error) {
-        //         console.error('Error saving drawing:', error);
-        //         return null;
-        //     }
-        // }
-
         // Fonction pour récupérer les données du dessin au format JSON
         async function getDrawingData() {
             console.log(drawingData)
@@ -169,9 +182,6 @@
                 ]) // Structurer les traits
             };
             object = JSON.stringify([exportData])
-
-            // DEBUG
-            // await saveDrawingToFile(object);
             
             try {
                 const response = await fetch('/predict/', {
@@ -184,18 +194,46 @@
                 });
                 
                 const result = await response.json();
-                console.log(result.predicted_class)
-                if (result.predicted_class) {
+                wordGuessed = result.predicted_class;
+                if (wordGuessed) {
                     // Add this div to your HTML body for displaying results
                     document.getElementById('prediction-result').textContent = 
-                        `Predicted class: ${result.predicted_class}`;
-                    document.body.offsetHeight; 
+                        `Predicted class: ${wordGuessed}`;
+                    document.body.offsetHeight;
+                    guessed();
                 } else {
                     alert('Error: Could not get prediction');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error sending data to server');
+            }
+        }
+
+        function ChangeWord(){
+            const randomItem = list[Math.floor(Math.random() * list.length)];
+            if( randomItem != currentWord){
+                currentWord = randomItem;
+                document.getElementById('word-to-draw').textContent = 
+                `AI must guess : ${randomItem}`;
+            }
+            else{
+                ChangeWord();
+            }
+        }
+
+        function randomWord(){
+            currentWord = list[Math.floor(Math.random() * list.length)];
+            document.getElementById('word-to-draw').textContent = 
+                        `AI must guess : ${currentWord}`;
+        }
+
+        function guessed(){
+            document.getElementById('prediction-result').textContent
+            if (currentWord == wordGuessed){
+                ChangeWord();
+                score++;
+                clearCanvas();
             }
         }
 

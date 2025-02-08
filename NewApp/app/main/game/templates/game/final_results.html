@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultats</title>
+</head>
+<body>
+    <h1>Fin du Jeu</h1>
+    <p>Votre score est de: <span id="final-score"></span> mots</p>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById('final-score').textContent = urlParams.get('score');
+    </script>
+</body>
+</html>

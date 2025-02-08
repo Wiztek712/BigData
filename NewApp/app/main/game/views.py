@@ -34,3 +34,8 @@ def save_drawing(request):
             
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
+def waiting_room(request):
+    return render(request, 'game/waiting_room.html')
+
+def final_results(request):
+    return render(request, 'game/final_results.html')
