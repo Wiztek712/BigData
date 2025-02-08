@@ -44,13 +44,14 @@
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');
         const list = ['apple','banana','bicycle', 'car', 'cat', 'dog', 'guitar', 'house', 'star', 'sword', 'tent', 'tree']
+        let saveDrawings= [];
         let drawing = false;
         let drawingData = []; // Stocke le trait en cours
         let previousDrawingData = []; // Stocke tous les traits précédents
         let currentStroke = null; // Trait courant
         let firstStrokeStartTime = null; // Temps de départ global pour tous les traits
         let sendDataInterval = null;
-        let timeLeft = 60; // Game duration in seconds
+        let timeLeft = 10; // Game duration in seconds
         let score = 0;
         let currentWord = "";
         let wordGuessed = "";
@@ -70,9 +71,59 @@
             }, 1000);
         }
 
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
         function endGame() {
-            alert(`Temps écoulé ! Votre score est de ${score} mots.`);
-            window.location.href = `/final-results/?score=${score}`;
+            const saveData = {
+                word: currentWord,
+                recognized: false,
+                time: Date.now() - firstStrokeStartTime,
+                key_id: new Date().toISOString(),
+                drawing: drawingData.map(stroke => [
+                    stroke.x.map(Math.floor), // Troncature des X
+                    stroke.y.map(Math.floor), // Troncature des Y
+                    stroke.t
+                    ])
+                };
+            saveDrawings.push(saveData)
+            console.log(saveDrawings)
+
+            // Get the CSRF token from the cookie
+            const csrfToken = getCookie('csrftoken');
+
+            // Send the saveData to the server using Fetch API
+            fetch('/save_game_data/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,  // Add CSRF token here
+                },
+                body: JSON.stringify(saveDrawings), // Send the saveData as JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data saved:', data);
+                // After saving, redirect to the final results page
+                alert(`Temps écoulé ! Votre score est de ${score} mots.`);
+                window.location.href = `/final-results/?score=${score}`;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('There was an error saving the game data.');
+            });
         }
 
         // Function to start auto-sending if it's not already running
@@ -210,9 +261,23 @@
             }
         }
 
-        function ChangeWord(){
+        function ChangeWord(found=false){
             const randomItem = list[Math.floor(Math.random() * list.length)];
             if( randomItem != currentWord){
+
+                const saveData = {
+                    word: currentWord,
+                    recognized: found,
+                    time: Date.now() - firstStrokeStartTime,
+                    key_id: new Date().toISOString(),
+                    drawing: drawingData.map(stroke => [
+                        stroke.x.map(Math.floor), // Troncature des X
+                        stroke.y.map(Math.floor), // Troncature des Y
+                        stroke.t
+                    ])
+                };
+                saveDrawings.push(saveData)
+
                 currentWord = randomItem;
                 document.getElementById('word-to-draw').textContent = 
                 `AI must guess : ${randomItem}`;
@@ -231,7 +296,7 @@
         function guessed(){
             document.getElementById('prediction-result').textContent
             if (currentWord == wordGuessed){
-                ChangeWord();
+                ChangeWord(true);
                 score++;
                 clearCanvas();
             }

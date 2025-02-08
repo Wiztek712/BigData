@@ -1,7 +1,15 @@
 from django.shortcuts import render, redirect
-from .forms import SignupForm
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from pymongo import MongoClient # type: ignore
+from .forms import SignupForm
+
+# Connect to MongoDB
+MONGO_URL = "mongodb://localhost:27017/"
+client = MongoClient(MONGO_URL)
+db = client["QuickDraw"]  # Use your database name
+users_collection = db["users"]  # Collection for users
 
 def signup(request):
     if request.method == 'POST':
@@ -9,14 +17,34 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('game')  # Redirige vers la page d'accueil
+
+            # Insert user into MongoDB
+            mongo_user = {
+                "username": user.username
+            }
+            users_collection.insert_one(mongo_user)
+
+            # Store username in session
+            request.session['username'] = user.username
+
+            return redirect('waiting_room')  # Redirect to waiting room
     else:
         form = SignupForm()
+
     return render(request, 'signup.html', {'form': form})
+
 
 """@login_required"""
 
-# Vue personnalisée pour rediriger vers 'about.html' après connexion
+# Vue personnalisée pour rediriger vers 'waiting_room.html' après connexion
 class CustomLoginView(LoginView):
-    template_name = 'login.html'  # Chemin vers le formulaire de connexion
-    next_page = '/game/'  # Redirection après connexion réussiew
+    template_name = 'login.html'
+    next_page = '/waiting-room/'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        # Store username in session after login
+        self.request.session['username'] = self.request.user.username
+
+        return response
