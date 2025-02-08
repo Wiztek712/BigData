@@ -36,9 +36,32 @@
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');
         let drawing = false;
-        let drawingData = []; // Stocke les traits (liste des listes)
+        let drawingData = []; // Stocke le trait en cours
+        let previousDrawingData = []; // Stocke tous les traits précédents
         let currentStroke = null; // Trait courant
         let firstStrokeStartTime = null; // Temps de départ global pour tous les traits
+        let sendDataInterval = null;
+        const SEND_INTERVAL = 200; // Send every 200 milliseconds
+
+        // Function to start auto-sending if it's not already running
+        function startAutoSend() {
+            console.log("start")
+            if (!sendDataInterval) {
+                sendDataInterval = setInterval(() => {
+                    if (drawingData.length > 0) {
+                        requestIdleCallback(getDrawingData, { timeout: 100 }); // Use idle time to prevent lag
+                    }
+                }, SEND_INTERVAL);
+            }
+        }
+
+
+        // Function to stop sending data when drawing stops
+        function stopAutoSend() {
+            console.log("stop")
+            clearInterval(sendDataInterval);
+            sendDataInterval = null;
+        }
 
         // Fonction pour démarrer le dessin
         function startDrawing(e) {
@@ -57,16 +80,20 @@
             }
 
             draw(e); // Dessiner immédiatement
+            startAutoSend();
         }
 
         // Fonction pour arrêter le dessin
         function stopDrawing() {
             if (drawing && currentStroke) {
-                drawingData.push(currentStroke); // Ajouter le trait terminé à la liste principale
+                previousDrawingData.push(currentStroke); // Ajouter le trait terminé à la liste principale
+                drawingData = previousDrawingData;
                 currentStroke = null; // Réinitialiser le trait courant
             }
             drawing = false;
             ctx.beginPath(); // Terminer le chemin courant
+            getDrawingData();
+            stopAutoSend();
         }
 
         // Fonction pour dessiner
@@ -84,6 +111,10 @@
             currentStroke.y.push(y);
             currentStroke.t.push(t);
 
+            drawingData = [];
+            drawingData = drawingData.concat(previousDrawingData, currentStroke);
+            // drawingData.push(currentStroke);
+
             // Dessiner sur le canvas
             ctx.lineWidth = 2;
             ctx.lineCap = 'round'; // Terminaisons arrondies
@@ -99,29 +130,32 @@
         function clearCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawingData = []; // Réinitialiser les traits
+            previousDrawingData = [];
             currentStroke = null;
+            document.getElementById('prediction-result').textContent =  "";
             firstStrokeStartTime = null; // Réinitialiser le temps global
         }
 
-        // For DEBUG JSON
-        async function saveDrawingToFile(data) {
-            try {
-                const response = await fetch('/save-drawing/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                return await response.json();
-            } catch (error) {
-                console.error('Error saving drawing:', error);
-                return null;
-            }
-        }
+        // // For DEBUG JSON
+        // async function saveDrawingToFile(data) {
+        //     try {
+        //         const response = await fetch('/save-drawing/', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify(data)
+        //         });
+        //         return await response.json();
+        //     } catch (error) {
+        //         console.error('Error saving drawing:', error);
+        //         return null;
+        //     }
+        // }
 
         // Fonction pour récupérer les données du dessin au format JSON
         async function getDrawingData() {
+            console.log(drawingData)
             const exportData = {
                 word: 0, // Exemple, tu peux le modifier
                 countrycode: "FR",
@@ -150,10 +184,12 @@
                 });
                 
                 const result = await response.json();
+                console.log(result.predicted_class)
                 if (result.predicted_class) {
                     // Add this div to your HTML body for displaying results
                     document.getElementById('prediction-result').textContent = 
                         `Predicted class: ${result.predicted_class}`;
+                    document.body.offsetHeight; 
                 } else {
                     alert('Error: Could not get prediction');
                 }

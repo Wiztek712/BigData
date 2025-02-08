@@ -100,7 +100,7 @@ class QuickDrawDataset(Dataset):
     
 def process(data):
     try:
-        print("Processing data...")
+        # print("Processing data...")
         # print(data)
         df = pd.DataFrame.from_records(data)
         # print("df : ", df)

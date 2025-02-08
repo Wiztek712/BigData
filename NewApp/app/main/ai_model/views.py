@@ -11,6 +11,7 @@ UPLOAD_DIR = "ai_model/model/"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 word_class_mapping = [['apple', 0], ['banana', 1], ['bicycle', 2], ['car', 3], ['cat', 4], ['dog', 5], ['guitar', 6], ['house', 7], ['star', 8], ['sword', 9], ['tent', 10], ['tree', 11]]
+model = getModel()
 
 @csrf_exempt
 def download_model(request):
@@ -28,6 +29,7 @@ def download_model(request):
 
 @csrf_exempt
 def predict(request):
+    # print("copy")
     if request.method == 'POST':
         # print(request.body)
         try:
@@ -40,26 +42,26 @@ def predict(request):
             # print("Received JSON data:", json.dumps(data, indent=4))    
             # print("Received word:", data.get("word"))
 
-            # Store raw JSON data before any transformation
-            destination_path = "ai_model/model/raw_prediction.json"
-            with open(destination_path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=4)
+            # # Store raw JSON data before any transformation
+            # destination_path = "ai_model/model/raw_prediction.json"
+            # with open(destination_path, "w", encoding="utf-8") as f:
+            #     json.dump(data, f, indent=4)
 
             with torch.no_grad():
                 processed_data = process(data)
-                model = getModel()
-                # print("model : ", model)
-                print("processed_data : ", processed_data)
-                for images, labels in processed_data:
-                    print("images before : ",images)
-                    print("labels before : ",labels)
-                    images, labels = images.to(device), labels.to(device)
-                    print("images : ",images)
-                    print("labels : ",labels)
-                    output = model(images)
-                    print(output)
-                    predicted_class = word_class_mapping[torch.argmax(output, dim=1).item()][0]
                 
+                # print("model : ", model)
+                # print("processed_data : ", processed_data)
+                for images, labels in processed_data:
+                    # print("images before : ",images)
+                    # print("labels before : ",labels)
+                    images, labels = images.to(device), labels.to(device)
+                    # print("images : ",images)
+                    # print("labels : ",labels)
+                    output = model(images)
+                    # print(output)
+                    predicted_class = word_class_mapping[torch.argmax(output, dim=1).item()][0]
+                    # print("prediction done")
                 return JsonResponse({
                     "predicted_class": predicted_class
                 })

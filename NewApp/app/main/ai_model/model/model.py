@@ -36,15 +36,18 @@ class EnhancedCNN(nn.Module):
         x = self.conv_layers(x)
         x = self.fc_layers(x)
         return x
-    
+
+print("flag1")
 device = "cuda" if torch.cuda.is_available() else "cpu"
 deepModel = EnhancedCNN().to(device)
 optimizer = optim.Adam(deepModel.parameters(), lr=learning_rate)
 criterion = nn.CrossEntropyLoss()
-
+print("falg2")
 model = EnhancedCNN().to(device)
 model.load_state_dict(torch.load("ai_model/model/deepest_model64.pth", map_location=torch.device('cpu')))
 model.eval()
 
+print("flga3")
 def getModel():
+    print("flga4")
     return model
