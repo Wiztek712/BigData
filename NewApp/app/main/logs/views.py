@@ -19,4 +19,4 @@ def signup(request):
 # Vue personnalisée pour rediriger vers 'about.html' après connexion
 class CustomLoginView(LoginView):
     template_name = 'login.html'  # Chemin vers le formulaire de connexion
-    next_page = '/game/'  # Redirection après connexion réussie
+    next_page = '/game/'  # Redirection après connexion réussiew
