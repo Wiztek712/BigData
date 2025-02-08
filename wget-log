@@ -1,0 +1,8 @@
+--2025-02-06 21:10:15--  https://update.code.visualstudio.com/commit:33fc5a94a3f99ebe7087e8fe79fbe1d37a251016/server-linux-x64/stable
+Resolving update.code.visualstudio.com (update.code.visualstudio.com)... 13.107.246.76, 2620:1ec:bdf::76
+Connecting to update.code.visualstudio.com (update.code.visualstudio.com)|13.107.246.76|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://vscode.download.prss.microsoft.com/dbazure/download/stable/33fc5a94a3f99ebe7087e8fe79fbe1d37a251016/vscode-server-linux-x64.tar.gz [following]
+--2025-02-06 21:10:17--  https://vscode.download.prss.microsoft.com/dbazure/download/stable/33fc5a94a3f99ebe7087e8fe79fbe1d37a251016/vscode-server-linux-x64.tar.gz
+Resolving vscode.download.prss.microsoft.com (vscode.download.prss.microsoft.com)... failed: Temporary failure in name resolution.
+wget: unable to resolve host address ‘vscode.download.prss.microsoft.com’
