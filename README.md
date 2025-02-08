@@ -93,7 +93,7 @@ The following commands assumes that you have python3, python-virtualenv and pip3
 In root folder : 
 ```bash
 # Linux
-virtualenv venv
+python venv .venv
 source venv/bin/activate
 
 # Windows
@@ -103,10 +103,6 @@ python venv .venv
 
 Then, please run this command to install all the requiered libraries
 ```bash
-# Linux
-pip3 install -r application/requirements.txt
-
-# Windows
 pip install -r application/requirements.txt
 ```
 
