@@ -4,43 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leaderboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            text-align: center;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-        }
-        .leaderboard {
-            border: 2px solid #333;
-            border-radius: 10px;
-            padding: 20px;
-            width: 300px;
-            background-color: #f9f9f9;
-        }
-        h2 {
-            margin-bottom: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        th {
-            background-color: #333;
-            color: white;
-        }
-    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/leaderboard.css' %}">
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="{% url 'waiting_room' %}">Play</a>
+            <a href="{% url 'leaderboard' %}">LeaderBoard</a>
+        </nav>
+    </header>
 
     <h1>Game Leaderboard</h1>
     {% if username %}

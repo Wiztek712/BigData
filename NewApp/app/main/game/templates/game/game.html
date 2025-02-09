@@ -4,42 +4,28 @@
     {% load static %}
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
     <title>Zone de Dessin</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #drawingCanvas {
-            border: 2px solid #000;
-            cursor: crosshair;
-            display: block;
-            margin: 20px auto;
-        }
-        #timer {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: red;
-        }
-    </style>
 </head>
 <body>
-    <h1>Bienvenue sur la zone de dessin</h1>
+    <div class="container">
+        <h1>Dessinez !</h1>
 
-    <h1>Zone de Dessin</h1>
-    <p>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</p>
+        <div id="timer">Temps restant: <span id="time-left">60</span> secondes</div>
 
-    <div id="timer">Temps restant: <span id="time-left">60</span> secondes</div>
-
-    <!-- Canvas -->
-    <div id="word-to-draw" style="margin-top: 20px; font-size: 1.2em;"></div>
-    <canvas id="drawingCanvas" width="512" height="512"></canvas>
-    <div id="prediction-result" style="margin-top: 20px; font-size: 1.2em;"></div>
-    <!-- Boutons -->
-    <button onclick="clearCanvas()">Effacer</button>
-    <button onclick="ChangeWord()">Pass</button>
-
+        <!-- Canvas -->
+        <div class=" drawing-area">
+            <div id="word-to-draw" style="margin-top: 20px; font-size: 1.2em;"></div>
+            <canvas id="drawingCanvas" width="512" height="512"></canvas>
+            <div id="prediction-result" style="margin-top: 20px; font-size: 1.2em;"></div>
+        </div>
+        <!-- Boutons -->
+        <div class=" btn">
+            <button class = "clear-button" onclick="clearCanvas()">Clear</button>
+            <button class = "pass-button" onclick="ChangeWord()">Pass</button>
+        </div>
+    </div>
     <script>
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');

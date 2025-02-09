@@ -5,16 +5,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: 100%;
     background-color: #f4f4f9;
 }
 
 .container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
     max-width: 1200px;
     width: 100%;
-    gap: 20px;
+    /* gap: 20px; */
 }
 
 .drawing-area {
@@ -43,9 +44,16 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.btn {
+    display: flex;
+    /* justify-content: space-around; */
+    gap: 20px;
+}
+
 .clear-button {
     display: block;
     margin: 0 auto;
+    width: 100px;
     padding: 10px 20px;
     font-size: 1rem;
     background-color: #dc3545;
@@ -53,11 +61,30 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    
     transition: background-color 0.3s ease;
 }
 
 .clear-button:hover {
     background-color: #b02a37;
+}
+
+.pass-button {
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #3562dc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pass-button:hover {
+    background-color: #2a54b0;
 }
 
 .info-area {
@@ -97,4 +124,20 @@ body {
 
 .info-area button:hover {
     background-color: #0056b3;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+#drawingCanvas {
+    border: 2px solid #000;
+    cursor: crosshair;
+    display: block;
+    margin: 20px auto;
+}
+#timer {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: red;
 }

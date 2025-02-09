@@ -19,11 +19,12 @@ from django.urls import path
 from ai_model.views import download_model, predict
 from game.views import game, waiting_room, final_results, save_game_data
 from logs.views import CustomLoginView, signup
-from home.views import home
+from home.views import home, loghome
 from leaderboard.views import leaderboard
 
 urlpatterns = [
-    path('', home, name='home'), # Welcoming page
+    path('', loghome, name='log_home'), # Log welcoming page
+    path('home', home, name='home'), # Welcoming page
     path('admin/', admin.site.urls),
     path('game/', game, name='game'), # Used for playing
     path('waiting-room/', waiting_room, name='waiting_room'), # Before the game
