@@ -112,4 +112,10 @@ def process(data):
     except Exception as e:
         return {"error": str(e)}
 
-
+def display(data):
+    try:
+        df = pd.DataFrame.from_records(data)
+        prediction_dataset = QuickDrawDataset(df["drawing"], df["word"], resize_to=(256, 256))
+        return prediction_dataset
+    except Exception as e:
+        return {"error": str(e)}

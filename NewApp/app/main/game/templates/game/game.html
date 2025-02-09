@@ -104,21 +104,24 @@
             // Get the CSRF token from the cookie
             const csrfToken = getCookie('csrftoken');
 
-            // Send the saveData to the server using Fetch API
+            // Send the saveDrawings to the server using Fetch API
             fetch('/save_game_data/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken,  // Add CSRF token here
                 },
-                body: JSON.stringify(saveDrawings), // Send the saveData as JSON
+                body: JSON.stringify({
+                    saveDrawings: saveDrawings, // Send drawing data
+                    score: score // Send score within the body
+                }),
             })
             .then(response => response.json())
             .then(data => {
                 console.log('Data saved:', data);
                 // After saving, redirect to the final results page
                 alert(`Temps écoulé ! Votre score est de ${score} mots.`);
-                window.location.href = `/final-results/?score=${score}`;
+                window.location.href = `/final-results/`;
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -281,6 +284,8 @@
                 currentWord = randomItem;
                 document.getElementById('word-to-draw').textContent = 
                 `AI must guess : ${randomItem}`;
+
+                clearCanvas();
             }
             else{
                 ChangeWord();

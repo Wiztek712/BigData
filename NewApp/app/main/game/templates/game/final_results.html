@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <title>Résultats</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
         .result-container {
             display: flex;
             flex-wrap: wrap;
@@ -22,7 +16,7 @@
             border-radius: 8px;
             padding: 20px;
             margin: 10px;
-            width: 200px;
+            width: 250px;
             text-align: center;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -30,11 +24,6 @@
             margin: 10px 0;
             font-size: 1.2em;
             color: #333;
-        }
-        .result-box p {
-            margin: 5px 0;
-            font-size: 1em;
-            color: #666;
         }
         .result-box .recognized {
             color: green;
@@ -48,22 +37,27 @@
             font-size: 0.9em;
             color: #444;
         }
+        .drawing-image {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <h1>Résultats du Jeu</h1>
     <div class="result-container">
-        {% for data in game_data %}
+        {% for item, image in results %}
             <div class="result-box">
-                <h3>Mot à dessiner: {{ data.word }}</h3>
+                <h3>Mot à dessiner: {{ item.word }}</h3>
                 <p class="recognized-status">
-                    {% if data.recognized %}
+                    {% if item.recognized %}
                         <span class="recognized">Reconnu</span>
                     {% else %}
                         <span class="not-recognized">Non reconnu</span>
                     {% endif %}
                 </p>
-                <p class="time">Temps: {{ data.time }} ms</p>
+                <p class="time">Temps: {{ item.time }} ms</p>
+                <img class="drawing-image" src="data:image/png;base64,{{ image }}" alt="Drawing Image">
             </div>
         {% endfor %}
     </div>

@@ -3,37 +3,21 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 import json
-import os
-from datetime import datetime
+import base64
+import io
+import matplotlib.pyplot as plt
+from ai_model.model.process import display, QuickDrawDataset
+from pymongo import MongoClient  # type: ignore
+
+MONGO_URL = "mongodb://localhost:27017/"
+client = MongoClient(MONGO_URL)
+db = client["QuickDraw"]
+users_collection = db["users"]
+drawings_collection = db["drawings"]
+games_collection = db["games"]
 
 def game(request):
     return render(request, 'game/game.html')
-
-# @csrf_exempt
-# def save_drawing(request):
-#     if request.method == 'POST':
-#         try:
-#             data = json.loads(request.body)
-            
-#             # Create drawings directory if it doesn't exist
-#             drawings_dir = os.path.join(os.path.dirname(__file__), 'templates', 'game', 'drawings')
-#             os.makedirs(drawings_dir, exist_ok=True)
-            
-#             # Generate unique filename using timestamp
-#             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-#             filename = f'drawing_{timestamp}.json'
-#             filepath = os.path.join(drawings_dir, filename)
-            
-#             # Save the drawing data
-#             with open(filepath, 'w') as f:
-#                 json.dump(data, f, indent=2)
-            
-#             return JsonResponse({'success': True, 'filename': filename})
-            
-#         except Exception as e:
-#             return JsonResponse({'success': False, 'error': str(e)})
-            
-#     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 @login_required
 def waiting_room(request):
@@ -43,25 +27,65 @@ def waiting_room(request):
 def save_game_data(request):
     if request.method == 'POST':
         try:
-            # Get the data from the POST request
-            save_data = json.loads(request.body)
-            # Save the data in the session (or database if needed)
-            request.session['game_data'] = save_data
+            data = json.loads(request.body)
 
-            # Return a success response
-            return JsonResponse({'status': 'success', 'message': 'Game data saved successfully'})
+            # Extract data
+            user = request.user
+            save_drawings = data.get('saveDrawings', [])  # List of drawings
+            score = data.get('score', 0)
+
+            # Store in session
+            request.session['save_drawings'] = save_drawings
+            request.session['score'] = score
+
+            # Save the game to the 'games' collection in MongoDB
+            game_data = {
+                "user_id": str(user.id),  # Store user_id as a string
+                "score": score,
+            }
+            print(game_data)
+            game_result = games_collection.insert_one(game_data)
+            game_id = game_result.inserted_id  # Get the inserted game's ID
+
+            # Save each drawing to the 'drawings' collection
+            for drawing in save_drawings:
+                drawing_data = {
+                    "game_id": game_id,  # Link to the game
+                    "user_id": str(user.id),  # Store user_id as a string
+                    "drawing_data": drawing.get('drawing', {}),  # Drawing data
+                    "time_to_draw": drawing.get('time', 0),  # Time taken
+                    "found": drawing.get('found', False)  # Found or not
+                }
+                print(drawing_data)
+                drawings_collection.insert_one(drawing_data)
+
+            # return JsonResponse({'status': 'success', 'message': 'Game data saved successfully'})
 
         except Exception as e:
-            # Handle errors and return a JSON response with error
             return JsonResponse({'status': 'error', 'message': str(e)})
 
-    else:
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
-# Final results view
 def final_results(request):
-    score = request.GET.get('score')  # Get score from URL parameters
-    game_data = request.session.get('game_data', [])
-    
-    # Now render the final results page with the data
-    return render(request, 'game/final_results.html', {'score': score, 'game_data': game_data})
+    game_data = request.session.get('save_drawings', [])
+    # print(game_data)
+    dataset = display(game_data)
+    size = len(game_data)
+    images=[]
+
+    for i in range(size):
+        drawing = dataset.__getitem__(i)
+        plt.imshow(1 - drawing[0].squeeze(), cmap='gray')  # Squeeze to remove the single channel dimension
+        plt.axis('off')  # Hide axis for better visualization
+        plt.title(drawing[1])
+        buf = io.BytesIO()
+        plt.savefig(buf, format="png")
+        buf.seek(0)
+        img_str = base64.b64encode(buf.read()).decode('utf-8')
+        buf.close()
+
+        images.append(img_str)
+
+    results = zip(game_data, images)
+
+    return render(request, 'game/final_results.html', {'results': results})
