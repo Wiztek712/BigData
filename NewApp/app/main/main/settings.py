@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'ai_model',
     'logs',
     'home',
+    'leaderboard',
 ]
 
 MIDDLEWARE = [

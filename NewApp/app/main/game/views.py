@@ -25,12 +25,21 @@ def waiting_room(request):
     return render(request, 'game/waiting_room.html', {'username': username})
 
 def save_game_data(request):
+    username = request.session.get('username', None)
+    # print('I try to do smthg')
     if request.method == 'POST':
+        # print('I receive a POST')
         try:
+            # print('I try one more tiome to do smthg')
             data = json.loads(request.body)
+            # print('JSON loads')
 
             # Extract data
-            user = request.user
+            user = users_collection.find_one({'username': username})
+            # print("user : ", user)
+            user_id = user['_id']
+            # print('user_id :', user_id)
+
             save_drawings = data.get('saveDrawings', [])  # List of drawings
             score = data.get('score', 0)
 
@@ -40,10 +49,10 @@ def save_game_data(request):
 
             # Save the game to the 'games' collection in MongoDB
             game_data = {
-                "user_id": str(user.id),  # Store user_id as a string
+                "user_id": user_id,  # Store user_id as a string
                 "score": score,
             }
-            print(game_data)
+            # print(game_data)
             game_result = games_collection.insert_one(game_data)
             game_id = game_result.inserted_id  # Get the inserted game's ID
 
@@ -51,12 +60,13 @@ def save_game_data(request):
             for drawing in save_drawings:
                 drawing_data = {
                     "game_id": game_id,  # Link to the game
-                    "user_id": str(user.id),  # Store user_id as a string
+                    "user_id": user_id,  # Store user_id as a string
+                    "word": drawing.get("word", ""), # Work to guess
                     "drawing_data": drawing.get('drawing', {}),  # Drawing data
                     "time_to_draw": drawing.get('time', 0),  # Time taken
-                    "found": drawing.get('found', False)  # Found or not
+                    "found": drawing.get('recognized', False)  # Found or not
                 }
-                print(drawing_data)
+                # print(drawing_data)
                 drawings_collection.insert_one(drawing_data)
 
             # return JsonResponse({'status': 'success', 'message': 'Game data saved successfully'})

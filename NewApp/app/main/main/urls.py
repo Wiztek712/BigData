@@ -20,6 +20,7 @@ from ai_model.views import download_model, predict
 from game.views import game, waiting_room, final_results, save_game_data
 from logs.views import CustomLoginView, signup
 from home.views import home
+from leaderboard.views import leaderboard
 
 urlpatterns = [
     path('', home, name='home'), # Welcoming page
@@ -27,7 +28,8 @@ urlpatterns = [
     path('game/', game, name='game'), # Used for playing
     path('waiting-room/', waiting_room, name='waiting_room'), # Before the game
     path('final-results/', final_results, name='final_results'), # End of the game
-    path('save_game_data/', save_game_data, name='save_game_data'),
+    path('save_game_data/', save_game_data, name='save_game_data'), # Save data to database
+    path('leaderboard/', leaderboard, name='leaderboard'), # Display the leaderboard
     path('model/', download_model, name='ai_model'), # Used for updating the ai_model
     path('predict/', predict, name='predict'), # Used for sending the drawing
     path('signup/', signup, name='signup'), # Used for logging

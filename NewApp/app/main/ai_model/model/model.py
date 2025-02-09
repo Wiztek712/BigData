@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 
 batch_size = 32
-num_classes = 12
+num_classes = 23
 learning_rate = 0.001
 num_epochs = 10
 
@@ -42,7 +42,7 @@ deepModel = EnhancedCNN().to(device)
 optimizer = optim.Adam(deepModel.parameters(), lr=learning_rate)
 criterion = nn.CrossEntropyLoss()
 model = EnhancedCNN().to(device)
-model.load_state_dict(torch.load("ai_model/model/deepest_model64.pth", map_location=torch.device('cpu')))
+model.load_state_dict(torch.load("ai_model/model/deepest_model64_23labels.pth", map_location=torch.device('cpu')))
 model.eval()
 
 def getModel():

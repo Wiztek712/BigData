@@ -10,7 +10,10 @@ from .model.process import process
 UPLOAD_DIR = "ai_model/model/"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 device = "cuda" if torch.cuda.is_available() else "cpu"
-word_class_mapping = [['apple', 0], ['banana', 1], ['bicycle', 2], ['car', 3], ['cat', 4], ['dog', 5], ['guitar', 6], ['house', 7], ['star', 8], ['sword', 9], ['tent', 10], ['tree', 11]]
+# word_class_mapping = [['apple', 0], ['banana', 1], ['bicycle', 2], ['car', 3], ['cat', 4], ['dog', 5], ['guitar', 6], ['house', 7], ['star', 8], ['sword', 9], ['tent', 10], ['tree', 11]]
+word_class_mapping = [['apple',  0],  ['banana', 1], ['bench',  2], ['bicycle', 3], ['car', 4], ['cat', 5], ['dog', 6], ['elbow', 7], ['fish', 8], ['guitar', 9], ['hammer', 10], ['house', 11], ['ice cream', 12], ['moon', 13], ['pencil', 14], ['sailboat', 15], ['star', 16], ['sword', 17], ['t-shirt', 18], ['tent', 19], ['tree', 20], ['umbrella', 21], ['wine bottle', 22]]
+
+
 model = getModel()
 
 @csrf_exempt

@@ -13,6 +13,7 @@ try:
     print("Collection 'users' créée avec index unique sur _id")
 
     db["games"].create_index([("user_id", 1)])  # Index pour recherche rapide par utilisateur
+    db["games"].create_index([("score", 1)])  # Index pour recherche rapide par score (classement)
     print("Collection 'games' créée avec index unique sur _id et index sur user_id")
 
     db["drawings"].create_index([("user_id", 1)])  # Index pour liaison avec users
