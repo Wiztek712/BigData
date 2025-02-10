@@ -5,10 +5,11 @@ from django.contrib.auth.views import LoginView
 from pymongo import MongoClient # type: ignore
 from .forms import SignupForm
 
-# Connect to MongoDB
-MONGO_URL = "mongodb://localhost:27017/"
+MONGO_URL = "mongodb://myuser:mypassword@localhost:27017"
+
 client = MongoClient(MONGO_URL)
-db = client["QuickDraw"]  # Use your database name
+db = client["QuickDraw"]
+print("Connected to MongoDB")
 users_collection = db["users"]  # Collection for users
 
 def signup(request):

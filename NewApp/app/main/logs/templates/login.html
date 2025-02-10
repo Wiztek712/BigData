@@ -14,7 +14,7 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="hidden" name="next" value="{{ next }}"> <!-- Permet une redirection conditionnelle -->
+                <input type="hidden" name="next" value="{% url 'waiting_room' %}">
                 <button type="submit">Login</button>
             </form>
             <p>

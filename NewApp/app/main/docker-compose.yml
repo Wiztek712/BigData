@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongo_db
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: mongo
+      MONGO_INITDB_ROOT_USERNAME: myuser
+      MONGO_INITDB_ROOT_PASSWORD: mypassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  web:
+    build: .
+    container_name: django_app
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "main.wsgi:application"]
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_HOST: "mongo_db"
+      MONGO_PORT: "27017"
+      MONGO_USER: "myuser"
+      MONGO_PASSWORD: "mypassword"
+      MONGO_DB: "QuickDraw"
+
+
+volumes:
+  mongo_data:
