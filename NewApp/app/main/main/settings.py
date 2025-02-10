@@ -81,14 +81,14 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'mongo',
+        'NAME': 'QuickDraw',
         'CLIENT': {
-            'host': 'mongodb://myuser:mypassword@mongo_db:27017/mongo',
-            'authSource': 'admin',
+            'host': 'mongodb://myuser:mypassword@localhost:27017',
         }
     }
 }
 
+AUTH_USER_MODEL = 'logs.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
