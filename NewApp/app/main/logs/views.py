@@ -4,25 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from pymongo import MongoClient # type: ignore
 from .forms import SignupForm
-import os
-
-# Get MongoDB credentials from environment variables (for flexibility)
-# MONGO_HOST = os.getenv("MONGO_HOST", "mongo_db")  # Service name from docker-compose.yml
-# MONGO_PORT = os.getenv("MONGO_PORT", "27017")
-# MONGO_USER = os.getenv("MONGO_USER", "myuser")  
-# MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "mypassword")
-# MONGO_DB = os.getenv("MONGO_DB", "QuickDraw")
-
-# Connection string for MongoDB with authentication
-# MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
-# MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:{MONGO_PORT}"
 
 MONGO_URL = "mongodb://myuser:mypassword@localhost:27017"
-
-
-# client = MongoClient(MONGO_URL)
-# db = client[MONGO_DB]
-# print("Connected to MongoDB")
 
 client = MongoClient(MONGO_URL)
 db = client["QuickDraw"]
