@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from hostname import DB_URL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-xeem%wmo6u7=x8f*^wqm_#n^pav-_1$72z+9@l0xo@uq4(kdx-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -82,8 +82,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'QuickDraw',
+        'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongodb://myuser:mypassword@localhost:27017',
+            'host': DB_URL,
         }
     }
 }

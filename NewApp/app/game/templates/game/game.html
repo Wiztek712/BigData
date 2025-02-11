@@ -32,8 +32,7 @@
         // const list = ['apple','banana','bicycle', 'car', 'cat', 'dog', 'guitar', 'house', 'star', 'sword', 'tent', 'tree']
         const list = ['apple','banana', 'bench', 'bicycle', 'car', 'cat', 'dog', 'elbow', 'fish', 'guitar', 'hammer', 'house', 'ice cream', 'moon', 'pencil', 'sailboat', 'star', 'sword', 't-shirt', 'tent', 'tree', 'umbrella', 'wine bottle']
 
-
-        let saveDrawings= [];
+        let saveDrawings = [];
         let drawing = false;
         let drawingData = []; // Stocke le trait en cours
         let previousDrawingData = []; // Stocke tous les traits précédents
@@ -87,7 +86,7 @@
                     ])
                 };
             saveDrawings.push(saveData)
-            console.log(saveDrawings)
+            // console.log(saveDrawings)
 
             // Get the CSRF token from the cookie
             const csrfToken = getCookie('csrftoken');
@@ -106,7 +105,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Data saved:', data);
+                // console.log('Data saved:', data);
                 // After saving, redirect to the final results page
                 alert(`Temps écoulé ! Votre score est de ${score} mots.`);
                 window.location.href = `/final-results/`;
@@ -119,11 +118,11 @@
 
         // Function to start auto-sending if it's not already running
         function startAutoSend() {
-            console.log("start")
+            // console.log("start")
             if (!sendDataInterval) {
                 sendDataInterval = setInterval(() => {
                     if (drawingData.length > 0) {
-                        requestIdleCallback(getDrawingData, { timeout: 100 }); // Use idle time to prevent lag
+                        requestIdleCallback(getDrawingData, { timeout: 300 }); // Use idle time to prevent lag
                     }
                 }, SEND_INTERVAL);
             }
@@ -131,7 +130,7 @@
 
         // Function to stop sending data when drawing stops
         function stopAutoSend() {
-            console.log("stop")
+            // console.log("stop")
             clearInterval(sendDataInterval);
             sendDataInterval = null;
         }
@@ -200,17 +199,19 @@
 
         // Fonction pour effacer le canvas
         function clearCanvas() {
+            drawing = false;
+            ctx.beginPath();
+            stopAutoSend();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawingData = []; // Réinitialiser les traits
             previousDrawingData = [];
             currentStroke = null;
             document.getElementById('prediction-result').textContent =  "";
-            firstStrokeStartTime = null; // Réinitialiser le temps global
         }
 
         // Fonction pour récupérer les données du dessin au format JSON
         async function getDrawingData() {
-            console.log(drawingData)
+            // console.log(drawingData)
             const exportData = {
                 word: 0, // Exemple, tu peux le modifier
                 countrycode: "FR",
@@ -268,7 +269,7 @@
                     ])
                 };
                 saveDrawings.push(saveData)
-
+                firstStrokeStartTime = null; // Réinitialiser le temps global
                 currentWord = randomItem;
                 document.getElementById('word-to-draw').textContent = 
                 `AI must guess : ${randomItem}`;
@@ -276,7 +277,7 @@
                 clearCanvas();
             }
             else{
-                ChangeWord();
+                ChangeWord(found);
             }
         }
 

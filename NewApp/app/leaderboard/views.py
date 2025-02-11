@@ -13,14 +13,10 @@ import os
 # MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
 # MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:{MONGO_PORT}"
 
-MONGO_URL = "mongodb://myuser:mypassword@localhost:27017"
+# MONGO_URL = "mongodb://myuser:mypassword@localhost:27017"
+from hostname import DB_URL
 
-
-# client = MongoClient(MONGO_URL)
-# db = client[MONGO_DB]
-# print("Connected to MongoDB")
-
-client = MongoClient(MONGO_URL)
+client = MongoClient(DB_URL)
 db = client["QuickDraw"]
 print("Connected to MongoDB")
 
