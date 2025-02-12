@@ -89,6 +89,21 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'mydatabase',
+#         'ENFORCE_SCHEMA': False,
+#         'CLIENT': {
+#             'host': 'mongo.my-mongo-cluster.amazonaws.com',
+#             'port': 27017,
+#             'username': 'myuser',
+#             'password': 'mypassword',
+#             'authSource': 'admin'
+#         }
+#     }
+# }
+
 AUTH_USER_MODEL = 'logs.CustomUser'
 LOGIN_REDIRECT_URL = "/waiting-room/"
 
