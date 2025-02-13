@@ -86,7 +86,7 @@ def predict(request):
                     # print("images : ",images)
                     # print("labels : ",labels)
                     output = model(images)
-                    print("output : ",output)
+                    # print("output : ",output)
                     predicted_class = word_class_mapping[torch.argmax(output, dim=1).item()][0]
                     # print("prediction done")
                 return JsonResponse({
