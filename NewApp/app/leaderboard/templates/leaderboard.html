@@ -5,72 +5,68 @@
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard</title>
-    {% load static %}
+    <title>Leaderboard | QuickDraw'TSE</title>
     <link rel="stylesheet" href="{% static 'css/leaderboard.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'waiting_room' %}">Play</a>
-            <a href="{% url 'leaderboard' %}">LeaderBoard</a>
-        </nav>
-    </header>
 
-    <h1>Game Leaderboard</h1>
-    {% if username %}
-        <p>Welcome, <strong>{{ username }}</strong>!</p>
-    {% endif %}
+<header>
+    <nav>
+        <a href="{% url 'waiting_room' %}"> Play Again</a>
+        <a href="{% url 'log_home' %}"> Home</a>
+        <a href="{% url 'logout' %}">Log out</a>
+    </nav>
+</header>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-    <div class="container">
-        <!-- Global Leaderboard -->
-        <div class="leaderboard">
-            <h2>Top 10 Global Scores</h2>
-            <table>
-                <tr>
-                    <th>Rank</th>
-                    <th>Player</th>
-                    <th>Score</th>
-                </tr>
-                {% for game in global_data|slice:":10" %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>
-                        {% for user in users_collection %}
-                            {% if user.user_id == game.user_id %}
-                            {{ user.username }}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>{{ game.score }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
+<div class="container">
 
-        <!-- Personal Best -->
-        <div class="leaderboard">
-            <h2>Your Top 10 Scores</h2>
-            <table>
-                <tr>
-                    <th>Score</th>
-                    <th>Global Rank</th>
-                </tr>
-                {% for user_game in player_data %}
-                <tr>
-                    <td>{{ user_game.score }}</td>
-                    <td>
-                        {% for game in global_data %}
-                            {% if game.user_id == user_game.user_id and game.game_id == user_game.game_id%}
-                                {{ forloop.counter }}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
+    <!-- Global Leaderboard -->
+    <div class="leaderboard">
+        <h2>🌍 Top 10 Global Scores</h2>
+        <table>
+            <tr>
+                <th>🏅 Rank</th>
+                <th>👤 Player</th>
+                <th>📊 Best Score</th>
+            </tr>
+            {% for entry in global_data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ entry.username }}</td>
+                <td>{{ entry.best_score }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No scores available yet.</td></tr>
+            {% endfor %}
+        </table>
     </div>
 
+    <!-- Personal Best -->
+    <div class="leaderboard">
+        <h2>🏆 Your Top 10 Scores</h2>
+        <table>
+            <tr>
+                <th>📊 Score</th>
+                <th>🌍 Global Rank</th>
+            </tr>
+            {% for user_game in player_data %}
+            <tr>
+                <td>{{ user_game.score }}</td>
+                <td>{{ user_game.rank }}</td>  <!-- Affichage du classement global -->
+            </tr>
+            {% empty %}
+            <tr><td colspan="2">No personal scores recorded yet.</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 </body>
 </html>

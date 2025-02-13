@@ -5,6 +5,8 @@ from django.shortcuts import render
 import json
 import base64
 import io
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from ai_model.model.process import display, QuickDrawDataset
 from pymongo import MongoClient  # type: ignore
@@ -13,7 +15,7 @@ from hostname import DB_URL
 # Get MongoDB credentials from environment variables (for flexibility)
 # MONGO_HOST = os.getenv("MONGO_HOST", "mongo_db")  # Service name from docker-compose.yml
 # MONGO_PORT = os.getenv("MONGO_PORT", "27017")
-# MONGO_USER = os.getenv("MONGO_USER", "myuser")  
+# MONGO_USER = os.getenv("MONGO_USER", "myuser")
 # MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "mypassword")
 # MONGO_DB = os.getenv("MONGO_DB", "QuickDraw")
 

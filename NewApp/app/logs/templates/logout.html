@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out | QuickDraw'TSE</title>
+    <link rel="stylesheet" href="{% static 'css/logout.css' %}">
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="{% url 'login' %}"> Log In</a>
+        <a href="{% url 'home' %}"> Home</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>🚪 You have been logged out.</h1>
+    <p>Thank you for playing QuickDraw'TSE! Come back soon. 🎨</p>
+    <a href="{% url 'login' %}" class="btn-primary">Log In Again</a>
+</div>
+
+</body>
+</html>

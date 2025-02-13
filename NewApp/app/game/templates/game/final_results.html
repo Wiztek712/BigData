@@ -4,33 +4,38 @@
     {% load static %}
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
-    <title>Résultats</title>
-    {% load static %}
+    <title>Game Results</title>
     <link rel="stylesheet" href="{% static 'css/final_results.css' %}">
+</head>
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'waiting_room' %}">Play</a>
-            <a href="{% url 'leaderboard' %}">LeaderBoard</a>
-        </nav>
-    </header>
-    
-    <h1>Résultats du Jeu</h1>
-    <div class="result-container">
-        {% for item, image in results %}
-            <div class="result-box">
-                <h3>Mot à dessiner: {{ item.word }}</h3>
-                <p class="recognized-status">
-                    {% if item.recognized %}
-                        <span class="recognized">Reconnu</span>
-                    {% else %}
-                        <span class="not-recognized">Non reconnu</span>
-                    {% endif %}
-                </p>
-                <p class="time">Temps: {{ item.time }} ms</p>
-                <img class="drawing-image" src="data:image/png;base64,{{ image }}" alt="Drawing Image">
-            </div>
-        {% endfor %}
+
+<header>
+    <nav>
+        <a href="{% url 'waiting_room' %}">Play Again</a>
+        <a href="{% url 'leaderboard' %}">Leaderboard</a>
+        <a href="{% url 'log_home' %}">Home</a>
+        <a href="{% url 'logout' %}">Log out</a>
+    </nav>
+</header>
+
+<h1>Game Results</h1>
+
+<div class="result-container">
+    {% for item, image in results %}
+    <div class="result-box">
+        <h3>Drawn Word: <span class="word">{{ item.word }}</span></h3>
+        <p class="recognized-status">
+            {% if item.recognized %}
+            <span class="recognized">✅ Recognized</span>
+            {% else %}
+            <span class="not-recognized">❌ Not Recognized</span>
+            {% endif %}
+        </p>
+        <p class="time">⏳ Time Taken: {{ item.time }} ms</p>
+        <img class="drawing-image" src="data:image/png;base64,{{ image }}" alt="Drawing Image">
     </div>
+    {% endfor %}
+</div>
+
 </body>
 </html>

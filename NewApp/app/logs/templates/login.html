@@ -5,7 +5,7 @@
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login to QuickDraw'TSE</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
@@ -16,11 +16,11 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="hidden" name="next" value="{% url 'waiting_room' %}">
+                <input type="hidden" name="next" value="{% url 'log_home' %}">
                 <button type="submit">Login</button>
             </form>
             <p>
-                You don't have an account ? 
+                You don't have an account ?
                 <a href="{% url 'signup' %}">Signup here</a>.
             </p>
         </section>
