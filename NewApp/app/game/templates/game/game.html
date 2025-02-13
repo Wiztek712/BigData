@@ -29,9 +29,7 @@
     <script>
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');
-        // const list = ['apple','banana','bicycle', 'car', 'cat', 'dog', 'guitar', 'house', 'star', 'sword', 'tent', 'tree']
-        const list = ['apple','banana', 'bench', 'bicycle', 'car', 'cat', 'dog', 'elbow', 'fish', 'guitar', 'hammer', 'house', 'ice cream', 'moon', 'pencil', 'sailboat', 'star', 'sword', 't-shirt', 'tent', 'tree', 'umbrella', 'wine bottle']
-
+        var list = {{ word_list|safe }}; // May indicate an error but it works
         let saveDrawings = [];
         let drawing = false;
         let drawingData = []; // Stocke le trait en cours
@@ -75,6 +73,7 @@
         }
 
         function endGame() {
+            stopDrawing();
             const saveData = {
                 word: currentWord,
                 recognized: false,

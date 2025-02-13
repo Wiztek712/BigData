@@ -1,37 +1,37 @@
 version: '3.8'
 
 services:
-  web:
-    build: .
-    ports:
-      - "8000:8000"
-    # depends_on:
-    #   - mongo
-    environment:
-      - MONGO_URL=mongodb+srv://rabanquentin:Yl9svhJSF3F0Fodp@mongo.yrj08.mongodb.net/?retryWrites=true&w=majority&appName=mongo
-    networks:
-      - newapp_mynetwork
-    volumes:
-      - ./app:/app
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
-  # mongo:
-  #   image: mongo:latest
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: myuser
-  #     MONGO_INITDB_ROOT_PASSWORD: mypassword
+  # web:
+  #   build: .
   #   ports:
-  #     - "27017:27017"
-  #   volumes:
-  #     - mongo_data:/data/db
+  #     - "8000:8000"
+  #   # depends_on:
+  #   #   - mongo
+  #   environment:
+  #     - MONGO_URL=mongodb+srv://rabanquentin:Yl9svhJSF3F0Fodp@mongo.yrj08.mongodb.net/?retryWrites=true&w=majority&appName=mongo
   #   networks:
   #     - newapp_mynetwork
+  #   volumes:
+  #     - ./app:/app
+  #   command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: myuser
+      MONGO_INITDB_ROOT_PASSWORD: mypassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - newapp_mynetwork
 
 networks:
   newapp_mynetwork:
     driver: bridge
 
-# volumes:
-#   mongo_data:
-#     driver: local
+volumes:
+  mongo_data:
+    driver: local
