@@ -1,0 +1,5 @@
+{
+    "words": [
+      {"word": "apple", "class": 0}, {"word": "banana", "class": 1}, {"word": "bench", "class": 2}
+    ]
+}
