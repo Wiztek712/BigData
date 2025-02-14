@@ -1,72 +1,133 @@
-# BigData
-School Project - Borget Flavien, JACQUET Clément, LAVAL Corentin, RABAN Quentin
+# BigData - Interactive Pictionary AI
+**School Project - Borget Flavien, Jacquet Clément, Laval Corentin, Raban Quentin**
 
-# Subject
+## **Project Overview**
+This project aims to create an interactive **Pictionary-style** web application where users draw objects, and a machine learning model attempts to recognize them in real time. This concept was inspired by **Google's "Quick, Draw!"** project.
 
-The aim of this project is to create an interactive Pictionary application where users draw objects and a machine learning model tries to guess what they are drawing. This application was developed by Google in their project
-“Quick, Draw” project.
+###  **Main Objectives**
+#### **1️⃣ Machine Learning**
+- Develop an **image classification model** capable of recognizing freehand drawings.
+- Use an **annotated dataset** to train the model.
+- Implement **supervised and unsupervised learning** techniques to optimize recognition.
 
-Several objectives emerge in this project:
-## Machine Learning:
-- Develop an image classification model capable of recognizing freehand drawings. Use a dataset of drawings to train the model.
-- Implement supervised and unsupervised learning techniques to improve model performance.
-## Front-End:
-- Design an intuitive user interface where users can draw using a digital canvas. The interface should display the drawing in real time and show attempts to recognize the model.
-- Integrate features such as a stopwatch, user scores (i.e. how long it takes the algorithm to guess the drawing) and categories of words to draw.
-## Back-End:
-- Set up a system to store user drawings and game results. This system must also store the machine learning models.
-- Use a database to manage users, drawings and scores
+#### **2️⃣ Front-End**
+- Design an intuitive UI with a **digital canvas** for users to draw on.
+- Display real-time recognition attempts.
+- Include **features** such as:
+    - A **timer**
+    - User **scores**
+    - Word **categories** (e.g., animals, objects, food).
 
-## Further Informations :
+#### **3️⃣ Back-End**
+- Store **user drawings and game results**.
+- Manage machine learning **models and their improvements**.
+- Use a **MongoDB database** for handling users, drawings, and scores.
+- **Future migration:** **Host the full application (Docker) on AWS** for centralized access via a **public IP**.
 
-### Pictionary data
+---
 
-#### STEP 1 - Designing the words to be drawn :
-You need to define a set of words or objects for users to draw (at least 10 words). Each word should be associated with a category (e.g. animals, objects, food) to facilitate selection during the game. You are encouraged to write a script to automatically retrieve sets of words from online sources.
+##  **Game Mechanics**
+###  **Pictionary Data**
+#### **Step 1 - Defining Words to Draw**
+- Create a set of **at least 10 words** per category.
+- Automate **word retrieval** from online sources (e.g., APIs).
 
-#### STEP 2 - Game results:
-You should also be able to store the results of the game for each participant, such as the time taken to draw and find each word and the number of attempts needed to guess the word correctly. These results can be analyzed afterwards to determine, for example, which word was the most difficult for the machine to guess.
+#### **Step 2 - Game Results Storage**
+- Store **drawing time, recognition attempts**, and other stats.
+- Analyze data to determine which words are the hardest to guess.
 
-### Training the image recognition model
+---
 
-In this part, we'll develop, train and implement a machine learning model to recognize drawings made by users.
+##  **Machine Learning Model**
+### **Step 1 - Dataset Selection**
+- Use public datasets such as:
+    - **Quick, Draw! Dataset**
+    - **Sketchy Database**
+    - **Doodle Dataset**.
 
-#### STEP 1 - Download drawing datasets:
-Use datasets available online, such as the Quick, Draw! Dataset, which contains millions of drawings of various objects. This data can be used to train your recognition model. See also: Sketchy Database, Doodle Dataset.
-#### STEP 2 - Implementing the model :
-In this step, you'll need to propose and implement a machine learning model to recognize user drawings. You can start by using pre-trained models, then you'll need to develop your own model to classify drawings in real time. You are free to set the complexity of the approach. For similar results, we'll give preference to the least complex models.
-#### STEP 3 - Continuous improvement of the model :
-Finally, you'll need to develop an intelligent approach to improving your image recognition model as users draw. For example, you could offer a “feedback” option where users can confirm whether the guessed word is correct, and use this information to refine the model over time.
+### **Step 2 - Model Implementation**
+- Start with **pre-trained models** (e.g., CNN, ResNet).
+- Develop a **custom model** to classify drawings in real-time.
 
-### Application
+### **Step 3 - Continuous Learning**
+- Implement **feedback-based learning**:
+    - Allow users to **confirm/reject** predictions.
+    - Use **collected feedback** to fine-tune the model.
 
-Design and implementation of an application for :
-- Retrieve user information (login system)
-- selection of words to draw stored in the Cloud
-- Run the game with recognition of the drawings via the model (the model is also stored in the cloud, inference is done online)
-- Communication of results to the user (drawing time, number of attempts).
+---
 
-The application doesn't need to store anything locally. All elements (words to be drawn, model, users, results) are stored in the cloud, in a technical solution that you can choose.
+##  **Web Application**
+### **Features**
+-  **User Authentication** (login system).
+-  **Word selection** stored in the Cloud.
+-  **Real-time drawing recognition** using the trained ML model.
+-  **Game results** displayed at the end.
 
-# Project
+Everything (words, models, users, and results) is stored **in the cloud**.
 
-## Install
+---
 
-In order to perfrom a clean install, let's begin by deploying a virtual environment.
-The following commands assumes that you have python3, python-virtualenv and pip3 already installed.
-In root folder : 
-```bash
-# Linux
-python venv .venv
-source venv/bin/activate
+## 🛠 **Technologies Used**
+| Component    | Technology |
+|-------------|-----------|
+| Front-End   | **HTML, CSS, JavaScript (Canvas API)** |
+| Back-End    | **Django, Flask, FastAPI** |
+| Database    | **MongoDB Atlas** |
+| ML Model    | **TensorFlow, PyTorch, OpenCV** |
+| Deployment  | **Docker, Docker Compose (AWS planned)** |
 
-# Windows
-python venv .venv
-.venv/Scripts/activate
-```
+---
 
-Then, please run this command to install the docker (in BigData\NewApp) (can take time and downloads)
-```bash
-docker-compose up -d
-```
-After that , you can go on http://localhost:8000/ to use the app
+##  **Project Setup**
+### **Installation**
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your_repo.git
+   cd your_repo
+   ```
+2. **Create and activate a virtual environment**:
+    ```bash
+    # Linux / macOS
+    python -m venv .venv
+    source .venv/bin/activate
+
+    # Windows
+    python -m venv .venv
+    .venv\Scripts\activate
+    ```
+
+3.	**Install dependencies**:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.	**Run the database & server**:
+
+    ```bash
+    docker-compose up -d
+    python manage.py migrate
+    python manage.py runserver
+    ```
+
+5.	**Access the app**:
+
+    Open http://localhost:8000/ in your browser.
+
+---
+
+## Deployment (Cloud)
+
+Current Deployment
+* The application is currently using **MongoDB Atlas** for storing:	
+  - User data 
+  - Drawings 
+  - Game results 
+  - ML models
+
+**Future Plans: Full Deployment on AWS**
+
+*   Move Dockerized Application to AWS (e.g., EC2 / ECS).
+*	Use a single public IP for centralized access.
+*	Improve scalability & reduce latency for ML inference.
+
