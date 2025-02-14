@@ -5,12 +5,12 @@
 This project aims to create an interactive **Pictionary-style** web application where users draw objects, and a machine learning model attempts to recognize them in real time. This concept was inspired by **Google's "Quick, Draw!"** project.
 
 ###  **Main Objectives**
-#### **1️⃣ Machine Learning**
+#### **1 Machine Learning**
 - Develop an **image classification model** capable of recognizing freehand drawings.
 - Use an **annotated dataset** to train the model.
 - Implement **supervised and unsupervised learning** techniques to optimize recognition.
 
-#### **2️⃣ Front-End**
+#### **2 Front-End**
 - Design an intuitive UI with a **digital canvas** for users to draw on.
 - Display real-time recognition attempts.
 - Include **features** such as:
@@ -18,7 +18,7 @@ This project aims to create an interactive **Pictionary-style** web application 
     - User **scores**
     - Word **categories** (e.g., animals, objects, food).
 
-#### **3️⃣ Back-End**
+#### **3 Back-End**
 - Store **user drawings and game results**.
 - Manage machine learning **models and their improvements**.
 - Use a **MongoDB database** for handling users, drawings, and scores.
@@ -67,7 +67,7 @@ Everything (words, models, users, and results) is stored **in the cloud**.
 
 ---
 
-## 🛠 **Technologies Used**
+##  **Technologies Used**
 | Component    | Technology |
 |-------------|-----------|
 | Front-End   | **HTML, CSS, JavaScript (Canvas API)** |
