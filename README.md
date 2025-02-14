@@ -3,86 +3,50 @@ School Project - Borget Flavien, JACQUET Clément, LAVAL Corentin, RABAN Quentin
 
 # Subject
 
-L'objectif de ce projet est de créer une application interactive de Pictionary où les
-utilisateurs dessinent des objets et un modèle de machine learning tente de deviner
-ce qu'ils dessinent. Cette application a été développée par Google dans leur projet
-“Quick, Draw”
+The aim of this project is to create an interactive Pictionary application where users draw objects and a machine learning model tries to guess what they are drawing. This application was developed by Google in their project
+“Quick, Draw” project.
 
-Plusieurs objectifs se dégagent dans ce projet :
-## Machine Learning :
-- Développer un modèle de classification d'images capable de reconnaître des
-dessins à main levée. Utiliser un ensemble de données de dessins pour
-entraîner le modèle.
-- Implémenter des techniques d'apprentissage supervisé et non supervisé pour
-améliorer la performance du modèle.
-## Front-End :
-- Concevoir une interface utilisateur intuitive où les utilisateurs peuvent
-dessiner en utilisant une toile numérique. L'interface doit afficher le dessin en
-temps réel et montrer les tentatives de reconnaissance du modèle.
-- Intégrer des fonctionnalités telles que le chronomètre, les scores des
-utilisateurs (c'est-à-dire le temps nécessaire à l’algorithme pour deviner le
-dessin) et les catégories de mots à dessiner.
-## Back-End :
-- Mettre en place un système pour stocker les dessins des utilisateurs et les
-résultats des parties. Ce système doit également stocker les modèles de
-machine learning.
-- Utiliser une base de données pour gérer les utilisateurs, les dessins et les
-scores
+Several objectives emerge in this project:
+## Machine Learning:
+- Develop an image classification model capable of recognizing freehand drawings. Use a dataset of drawings to train the model.
+- Implement supervised and unsupervised learning techniques to improve model performance.
+## Front-End:
+- Design an intuitive user interface where users can draw using a digital canvas. The interface should display the drawing in real time and show attempts to recognize the model.
+- Integrate features such as a stopwatch, user scores (i.e. how long it takes the algorithm to guess the drawing) and categories of words to draw.
+## Back-End:
+- Set up a system to store user drawings and game results. This system must also store the machine learning models.
+- Use a database to manage users, drawings and scores
 
 ## Further Informations :
 
-### Données du Pictionary
+### Pictionary data
 
-####  ETAPE 1 - Conception des mots à dessiner :
-Vous devez définir un ensemble de mots ou d'objets que les utilisateurs devront
-dessiner (au moins 10 mots). Chaque mot doit être associé à une catégorie (par
-exemple, animaux, objets, aliments) pour faciliter la sélection pendant le jeu. Vous
-êtes encouragés à écrire un script permettant de récupérer automatiquement des
-ensembles de mots à partir de sources en ligne.
+#### STEP 1 - Designing the words to be drawn :
+You need to define a set of words or objects for users to draw (at least 10 words). Each word should be associated with a category (e.g. animals, objects, food) to facilitate selection during the game. You are encouraged to write a script to automatically retrieve sets of words from online sources.
 
-####  ETAPE 2 - Résultats du jeu :
-Vous devez également être en mesure de stocker les résultats du jeu pour chaque
-participant, tels que le temps mis pour dessiner et trouver chaque mot et le nombre
-de tentatives nécessaires pour deviner correctement le mot. Ces résultats pourront
-être analysés a posteriori pour déterminer, par exemple, quel mot a été le plus difficile
-à deviner par la machine.
+#### STEP 2 - Game results:
+You should also be able to store the results of the game for each participant, such as the time taken to draw and find each word and the number of attempts needed to guess the word correctly. These results can be analyzed afterwards to determine, for example, which word was the most difficult for the machine to guess.
 
-### Entraînement du modèle de reconnaissance d'images
+### Training the image recognition model
 
-Dans cette partie, il s'agira d'élaborer, d'entraîner et de mettre en œuvre un modèle
-de machine learning pour reconnaître les dessins réalisés par les utilisateurs.
+In this part, we'll develop, train and implement a machine learning model to recognize drawings made by users.
 
-####  ETAPE 1 - Téléchargement des ensembles de données de dessins :
-Utilisez des ensembles de données disponibles en ligne, comme le Quick, Draw!
-Dataset, qui contient des millions de dessins de divers objets. Ces données peuvent
-être utilisées pour entraîner votre modèle de reconnaissance. Voir aussi : Sketchy
-Database, Doodle Dataset.
-####  ETAPE 2 - Mise en application du modèle :
-Dans cette étape, vous devrez proposer et mettre en œuvre un modèle de machine
-learning pour reconnaître les dessins des utilisateurs. Vous pouvez commencer par
-utiliser des modèles pré-entraînés, puis vous devrez développer votre propre modèle
-pour classer les dessins en temps réel. Vous êtes libres de fixer la complexité de
-l'approche. À résultat similaire, nous privilégierons les modèles les moins complexes.
-####  ETAPE 3 - Amélioration continue du modèle :
-Pour terminer, il conviendra de développer une approche intelligente permettant
-d’améliorer votre modèle de reconnaissance d'images au fur et à mesure que les
-utilisateurs dessinent. Par exemple, vous pouvez proposer une option de "feedback"
-où les utilisateurs peuvent confirmer si le mot deviné est correct, et utiliser ces
-informations pour affiner le modèle au fil du temps.
+#### STEP 1 - Download drawing datasets:
+Use datasets available online, such as the Quick, Draw! Dataset, which contains millions of drawings of various objects. This data can be used to train your recognition model. See also: Sketchy Database, Doodle Dataset.
+#### STEP 2 - Implementing the model :
+In this step, you'll need to propose and implement a machine learning model to recognize user drawings. You can start by using pre-trained models, then you'll need to develop your own model to classify drawings in real time. You are free to set the complexity of the approach. For similar results, we'll give preference to the least complex models.
+#### STEP 3 - Continuous improvement of the model :
+Finally, you'll need to develop an intelligent approach to improving your image recognition model as users draw. For example, you could offer a “feedback” option where users can confirm whether the guessed word is correct, and use this information to refine the model over time.
 
 ### Application
 
-Conception et implémentation d'une application permettant :
-- La récupération des informations sur l’utilisateur (système de login)
-- La sélection de mots à dessiner stockés dans le Cloud
-- Le déroulé du jeu avec reconnaissance des dessins via le modèle (le modèle
-est lui aussi stocké dans le cloud, l’inférence est faite en ligne)
-- La communication des résultats à l’utilisateur (temps de dessin, nombre de
-tentatives).
+Design and implementation of an application for :
+- Retrieve user information (login system)
+- selection of words to draw stored in the Cloud
+- Run the game with recognition of the drawings via the model (the model is also stored in the cloud, inference is done online)
+- Communication of results to the user (drawing time, number of attempts).
 
-L’application ne doit absolument rien stocker en local. Tous les éléments (mots à
-dessiner, modèle, utilisateurs, résultats) sont stockés dans le cloud, dans une
-solution technique qu’il vous appartient de choisir
+The application doesn't need to store anything locally. All elements (words to be drawn, model, users, results) are stored in the cloud, in a technical solution that you can choose.
 
 # Project
 
@@ -101,16 +65,8 @@ python venv .venv
 .venv/Scripts/activate
 ```
 
-Then, please run this command to install all the requiered libraries
+Then, please run this command to install the docker (in BigData\NewApp) (can take time and downloads)
 ```bash
-pip install -r application/requirements.txt
+docker-compose up -d
 ```
-
-## Run the project
-
-### AI
-
-In AI folder, you will find download.py and model.ipynb. The first implements functions to retrieve data from google cloud, the second is a jupyter notebook where we have developped the AI. You can run it through vscode or by running in BigData/application/AI folder : 
-```bash
-jupyter notebook
-```
+After that , you can go on http://localhost:8000/ to use the app
