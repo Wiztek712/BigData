@@ -5,21 +5,41 @@
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Big Data</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <title>Welcome | QuickDraw'TSE</title>
+    <link rel="stylesheet" href="{% static 'css/loghome.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'signup' %}">Signup</a>
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'leaderboard' %}">LeaderBoard</a>
-        </nav>
-    </header>
-    <div class="center-method">
-        <img src="{% static 'images/welcom.png' %}" alt="Description de l'image" class="centered-image">
-    </div>
-    
+
+<!-- Navigation -->
+<header>
+    <nav>
+        <a href="{% url 'leaderboard' %}">LeaderBoard</a>
+        <a href="{% url 'waiting_room' %}">Play</a>
+        <a href="{% url 'logout' %}">Log out</a>
+    </nav>
+</header>
+
+<!-- Section Fonctionnement de l'Application -->
+<section class="app-info">
+    <h2>How does it work?</h2>
+    <p>
+        QuickDraw'TSE,<br> is a game where you draw an object, and our AI tries to guess what it is!<br><br>
+        The faster and more accurate your drawings are, the higher your score will be.
+    </p>
+    <p>Compete with friends, climb the leaderboard, and improve your drawing skills! 🎨</p>
+
+    <a href="{% url 'waiting_room' %}" class="btn-primary">Start the Game</a>
+
+</section>
+
+<!-- Section Statistiques de l'Utilisateur -->
+<section class="user-stats">
+    <h2>Your Stats</h2>
+    <p><strong>Username:</strong> {{ username }}</p>
+    <p><strong>Total Games Played:</strong> {{ total_games }}</p>
+    <p><strong>Win Rate:</strong> {{ win_rate }}%</p>
+    <p><strong>Best Score:</strong> {{ best_score }}</p>
+</section>
+
 </body>
 </html>

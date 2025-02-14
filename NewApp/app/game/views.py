@@ -6,6 +6,8 @@ import json
 import requests
 import base64
 import io
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from ai_model.model.process import display, QuickDrawDataset
 from pymongo import MongoClient  # type: ignore

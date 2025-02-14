@@ -6,25 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waiting Room</title>
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/waiting_room.css' %}">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to the Waiting Room {{username}}</h1>
-        <p>
-            Before you start playing, please read the following rules carefully:
-        </p>
-        <ul>
-            <li>Rule 1: Follow fair play.</li>
-            <li>Rule 2: No cheating or exploiting bugs.</li>
-            <li>Rule 3: Respect other players.</li>
-            <li>Rule 4: Enjoy the game and have fun!</li>
-            <li>Utilisez votre souris ou votre doigt pour dessiner dans la zone ci-dessous.</li>
-        </ul>
-        <p>Click the button below when you're ready to start the game.</p>
-        <a href="{% url 'game' %}" class="start-btn">Start Game</a>
-        <a href="{% url 'home' %}" class="back-btn">Back</a>
+
+<div class="container">
+    <h1>Welcome to the Waiting Room, {{ user.username }}!</h1>
+    <p>Before you start playing, please read the following rules carefully:</p>
+
+    <ul class="rules-list">
+        <li> <strong>Rule 1:</strong> Follow fair play.</li>
+        <li> <strong>Rule 2:</strong> No cheating or exploiting bugs.</li>
+        <li> <strong>Rule 3:</strong> Respect other players.</li>
+        <li> <strong>Rule 4:</strong> Enjoy the game and have fun!</li>
+        <li> <strong>Tip:</strong> Use your mouse or finger to draw in the game area.</li>
+    </ul>
+
+    <p>Click the button below when you're ready to start the game.</p>
+
+    <div class="button-group">
+        <a href="{% url 'game' %}" class="start-btn"> Start Game</a>
+        <a href="{% url 'log_home' %}" class="back-btn"> Back</a>
     </div>
+</div>
+
 </body>
 </html>

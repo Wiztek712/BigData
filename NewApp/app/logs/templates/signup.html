@@ -5,7 +5,7 @@
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+    <title>Signup to QuickDraw'TSE</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
 </head>
@@ -19,6 +19,10 @@
                 <input type="hidden" name="next" value="{{ next }}"> <!-- Permet une redirection conditionnelle -->
                 <button type="submit">Signup</button>
             </form>
+            <p>
+                Already have an account?
+                <a href="{% url 'login' %}">Log in here</a>.
+            </p>
         </section>
     </main>
 </body>
