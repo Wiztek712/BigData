@@ -16,7 +16,7 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="hidden" name="next" value="{{ next }}"> <!-- Permet une redirection conditionnelle -->
+                <input type="hidden" name="next" value="{% url 'log_home' %}"> <!-- Permet une redirection conditionnelle -->
                 <button type="submit">Signup</button>
             </form>
             <p>
