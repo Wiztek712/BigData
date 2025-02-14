@@ -30,7 +30,7 @@ def signup(request):
             # Store username in session
             request.session['username'] = user.username
 
-            return redirect('loghome')  # Redirect to waiting room
+            return redirect('log_home')  # Redirect to waiting room
     else:
         form = SignupForm()
 
