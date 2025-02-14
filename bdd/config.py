@@ -1,4 +1,5 @@
 from pymongo import MongoClient # type: ignore
+# from pymongo.server_api import ServerApi
 import os
 
 # Get MongoDB credentials from environment variables (for flexibility)
@@ -13,7 +14,7 @@ import os
 # MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:{MONGO_PORT}"
 
 # MONGO_URL = "mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:27017"
-MONGO_URL = "mongodb://myuser:mypassword@localhost:27017"
+MONGO_URL = "mongodb+srv://rabanquentin:Yl9svhJSF3F0Fodp@mongo.yrj08.mongodb.net/?retryWrites=true&w=majority&appName=mongo"
 
 try:
     # client = MongoClient(MONGO_URL)
