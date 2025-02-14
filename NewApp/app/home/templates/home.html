@@ -5,20 +5,29 @@
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Big Data</title>
-    {% load static %}
+    <title>QuickDraw'TSE</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'waiting_room' %}">Drawing</a>
-            <a href="{% url 'leaderboard' %}">LeaderBoard</a>
-        </nav>
-    </header>
-    <div class="center-method">
-        <img src="{% static 'images/welcom.png' %}" alt="Description de l'image" class="centered-image">
+
+<nav>
+    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'signup' %}">Sign up</a>
+</nav>
+
+<main>
+    <div class="overlay">
+        <div class="welcome-container">
+            <h1>QuickDraw'TSE</h1>
+            <p class="description">
+                A student project in **Big Data & Machine Learning**.<br><br>
+                Test your drawing skills against an AI that tries to guess your artwork!<br>
+                Take part in the challenge and climb the leaderboard.
+            </p>
+            <a href="{% url 'login' %}" class="btn-primary">Start drawing</a>
+        </div>
     </div>
-    
+</main>
+
 </body>
 </html>

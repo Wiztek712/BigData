@@ -1,97 +1,102 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Définir la police globale */
+/* Style général */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-/* Style de l'en-tête */
-header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-}
-
-header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-}
-
-/* Style pour la barre de navigation */
-nav a {
-    text-decoration: none;
-    color: white;
-    font-size: 1.2em;
-    margin: 0 15px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-nav a:hover {
-    background-color: #34495e;
-}
-
-.center-method {
+    background-image: url('../images/fond.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.centered-image {
-    max-width: 100%;
-    height: auto;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 50px;
-}
-.container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-}
-h1 {
+    height: 100vh;
     color: #333;
 }
-p {
-    text-align: justify;
+
+/* Conteneur principal */
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
 }
+
+/* Titre */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Liste des règles */
+.rules-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin: 20px 0;
+}
+
+.rules-list li {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Groupe de boutons */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Boutons */
+.start-btn, .back-btn {
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: 0.3s;
+    display: inline-block;
+    text-align: center;
+    width: 45%;
+}
+
+/* Bouton Start */
 .start-btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #28a745;
+    background-color: #1abc9c;
     color: white;
-    text-decoration: none;
-    border-radius: 5px;
 }
+
 .start-btn:hover {
-    background-color: #218838;
+    background-color: #16a085;
 }
+
+/* Bouton Back */
 .back-btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #ca1f1f;
+    background-color: #e74c3c;
     color: white;
-    text-decoration: none;
-    border-radius: 5px;
 }
+
 .back-btn:hover {
-    background-color: #882121;
+    background-color: #c0392b;
+}
+
+/* RESPONSIVITÉ */
+@media screen and (max-width: 768px) {
+    .container {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .start-btn, .back-btn {
+        width: 100%;
+    }
 }

@@ -2,9 +2,9 @@
 body {
     font-family: 'Arial', sans-serif;
     background-image: url('../images/fond.png');
-    background-size: cover; 
-    background-repeat: no-repeat; 
-    background-position: center; 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     margin: 0;
     padding: 0;
     display: flex;
@@ -12,6 +12,18 @@ body {
     align-items: center;
     height: 100vh;
     color: #333;
+}
+
+main {
+    margin-right: 10vh;
+
+}
+form {
+    margin-right: 2vh;
+
+}
+button {
+    margin-left: 1vh;
 }
 
 /* Conteneur principal */

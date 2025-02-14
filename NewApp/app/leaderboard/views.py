@@ -1,21 +1,9 @@
 from django.shortcuts import render
 from pymongo import MongoClient  # type: ignore
-import os
-
-# Get MongoDB credentials from environment variables (for flexibility)
-# MONGO_HOST = os.getenv("MONGO_HOST", "mongo_db")  # Service name from docker-compose.yml
-# MONGO_PORT = os.getenv("MONGO_PORT", "27017")
-# MONGO_USER = os.getenv("MONGO_USER", "myuser")  
-# MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "mypassword")
-# MONGO_DB = os.getenv("MONGO_DB", "QuickDraw")
-
-# Connection string for MongoDB with authentication
-# MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
-# MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:{MONGO_PORT}"
-
-# MONGO_URL = "mongodb://myuser:mypassword@localhost:27017"
+from bson import ObjectId
 from hostname import DB_URL
 
+# Connexion à MongoDB
 client = MongoClient(DB_URL)
 db = client["QuickDraw"]
 print("Connected to MongoDB")
@@ -23,38 +11,50 @@ print("Connected to MongoDB")
 users_collection = db["users"]
 games_collection = db["games"]
 
-from bson import ObjectId
-
 def leaderboard(request):
     username = request.session.get('username', None)
+
+    # Vérifier si l'utilisateur existe
     user = users_collection.find_one({'username': username})
-    # print("user :", user)
+    user_id = user['_id'] if user else None
 
-    user_id = user['_id']
-    # print("user_id :", user_id)
+    # Regrouper les scores par utilisateur (meilleur score)
+    pipeline = [
+        {"$group": {
+            "_id": "$user_id",
+            "best_score": {"$max": "$score"}  # Prend le meilleur score de chaque joueur
+        }},
+        {"$sort": {"best_score": -1}},  # Trie par meilleur score décroissant
+    ]
 
-    user['user_id_str'] = user['_id']
+    global_data = list(games_collection.aggregate(pipeline))
 
-    # Convert users' ObjectId to a new key 'user_id_str' to avoid `_id` issues in the template
-    users = list(users_collection.find())
-    for user in users:
-        user['user_id'] = user['_id']  # Rename `_id` to `user_id_str`
-    # print('users : ',users)
+    # Associer les usernames aux user_id
+    user_ids = [entry["_id"] for entry in global_data]
+    users = {str(u["_id"]): u["username"] for u in users_collection.find({"_id": {"$in": user_ids}})}
 
-    # Convert game user_id to string
-    player_data = list(games_collection.find({"user_id": user_id}))
-    for game in player_data:
-        game['game_id'] = game['_id']
-    # print('player_data : ', player_data)    
+    # Ajouter les noms d'utilisateurs au leaderboard et transformer `_id` en `id`
+    for i, entry in enumerate(global_data, start=1):
+        entry["username"] = users.get(str(entry["_id"]), "Unknown Player")
+        entry["id"] = str(entry["_id"])  # Renommer `_id` en `id`
+        entry["rank"] = i  # Ajouter le classement global
+        del entry["_id"]  # Supprimer `_id` pour éviter le bug Django
 
-    global_data = list(games_collection.find().sort("score", -1))  # Get top 10 only
-    for game in global_data:
-        game['game_id'] = game['_id']
-    # print("global_data :", global_data)
+    # Créer un dictionnaire pour retrouver le classement par user_id
+    ranking_dict = {entry["id"]: entry["rank"] for entry in global_data}
+
+    # Récupération des scores personnels du joueur connecté
+    player_data = []
+    if user_id:
+        player_games = games_collection.find({"user_id": user_id}).sort("score", -1).limit(10)
+        player_data = list(player_games)
+        for game in player_data:
+            game["id"] = str(game["_id"])  # Renommer `_id` en `id`
+            game["rank"] = ranking_dict.get(str(game["user_id"]), "N/A")  # Récupérer le classement global
+            del game["_id"]
 
     return render(request, 'leaderboard.html', {
         'username': username,
-        'player_data': player_data,
         'global_data': global_data,
-        'users_collection': users
+        'player_data': player_data
     })

@@ -3,26 +3,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 import json
+import requests
 import base64
 import io
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from ai_model.model.process import display, QuickDrawDataset
 from pymongo import MongoClient  # type: ignore
 from hostname import DB_URL
-
-# Get MongoDB credentials from environment variables (for flexibility)
-# MONGO_HOST = os.getenv("MONGO_HOST", "mongo_db")  # Service name from docker-compose.yml
-# MONGO_PORT = os.getenv("MONGO_PORT", "27017")
-# MONGO_USER = os.getenv("MONGO_USER", "myuser")  
-# MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "mypassword")
-# MONGO_DB = os.getenv("MONGO_DB", "QuickDraw")
-
-# Connection string for MongoDB with authentication
-# MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
-# MONGO_URL = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:{MONGO_PORT}"
-
-# MONGO_URL = "mongodb://myuser:mypassword@localhost:27017"
-
 
 client = MongoClient(DB_URL)
 db = client["QuickDraw"]
@@ -30,9 +19,24 @@ print("Connected to MongoDB")
 users_collection = db["users"]
 drawings_collection = db["drawings"]
 games_collection = db["games"]
+srv = client["mydatabase"]
+word_collection = srv["word_mapping"]
+
+def get_word_list():
+    """Fetch word list from the Flask server."""
+    list = []
+    try:
+        documents = word_collection.find()
+        for word in documents:
+            list.append(word['word'])
+        return list
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching word list: {e}")
+        return list
 
 def game(request):
-    return render(request, 'game/game.html')
+    words = get_word_list()  # Fetch words from Flask
+    return render(request, 'game/game.html', {'word_list': words})
 
 @login_required
 def waiting_room(request):

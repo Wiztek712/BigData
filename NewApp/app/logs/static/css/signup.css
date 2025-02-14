@@ -2,9 +2,9 @@
 body {
     font-family: 'Arial', sans-serif;
     background-image: url('../images/fond.png');
-    background-size: cover; 
-    background-repeat: no-repeat; 
-    background-position: center; 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     margin: 0;
     padding: 0;
     display: flex;
@@ -12,6 +12,50 @@ body {
     align-items: center;
     height: 100vh;
     color: #333;
+}
+
+/* Texte sous le formulaire */
+.login-container p {
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+
+.login-container p a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.login-container p a:hover {
+    color: #34495e;
+}
+
+/* Rend l'astérisque rouge pour les champs obligatoires */
+label[for="id_username"]::after,
+label[for="id_password1"]::after,
+label[for="id_password2"]::after {
+    content: " *";
+    color: red;
+}
+
+/* Supprime la marge trop grande sous les messages d'erreur */
+ul.errorlist {
+    list-style: none;
+    color: red;
+    font-size: 0.9em;
+    padding: 0;
+    margin-top: 5px;
+}
+
+/* Style des messages d'erreur */
+ul.errorlist {
+    list-style: none;
+    color: red;
+    font-size: 0.9em;
+    padding: 0;
+    margin: 5px 0;
 }
 
 /* Conteneur principal */

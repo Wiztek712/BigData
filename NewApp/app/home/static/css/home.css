@@ -4,48 +4,103 @@
     box-sizing: border-box;
 }
 
-/* Définir la police globale */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    background-image: url('../images/welcom.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
     color: #333;
-}
-
-/* Style de l'en-tête */
-header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 20px 0;
     text-align: center;
 }
 
-header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+
+/* 🛠 NAVIGATION */
+nav {
+    background-color: #34495e;
+    padding: 10px;
 }
 
-/* Style pour la barre de navigation */
 nav a {
     text-decoration: none;
     color: white;
     font-size: 1.2em;
-    margin: 0 15px;
+    margin: 10px;
     padding: 10px 20px;
     border-radius: 5px;
     transition: background-color 0.3s;
+    display: inline-block;
+}
+
+h1{
+    margin-bottom: 20px;
+}
+
+p{
+    margin-bottom: 20px;
 }
 
 nav a:hover {
-    background-color: #34495e;
+    background-color: #1abc9c;
 }
 
-.center-method {
+/* 📌 CONTENU PRINCIPAL */
+main {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    margin-top: 40vh; /* Décale tout sous l’image (ajustable selon image) */
+    padding-top: 20px; /* Ajoute un léger espace */
 }
 
-.centered-image {
-    max-width: 100%;
-    height: auto;
+/* 💡 CONTAINER DU TEXTE */
+.welcome-container {
+    max-width: 600px;
+    padding: 20px;
+    background: #34495e; /* Fond du conteneur en bleu foncé */
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    color: white;
+}
+
+/* 🎯 BOUTON PRINCIPAL */
+.btn-primary {
+    background-color: #1abc9c;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #16a085;
+}
+
+/* 📱 RESPONSIVITÉ POUR MOBILE */
+@media screen and (max-width: 768px) {
+    body {
+        background-size: 80%; /* Réduit la taille de l’image sur mobile */
+    }
+
+    main {
+        margin-top: 60vh; /* Décale encore plus le texte sur petits écrans */
+    }
+
+    .welcome-container {
+        max-width: 90%;
+        padding: 15px;
+    }
+
+    .description {
+        font-size: 1em;
+    }
+
+    .btn-primary {
+        font-size: 1em;
+        padding: 10px 15px;
+    }
 }

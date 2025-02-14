@@ -4,17 +4,41 @@ import os
 import torch
 import pandas as pd
 import json
+import gridfs
+from io import BytesIO
+import requests
 from .model.model import EnhancedCNN, getModel
 from .model.process import process
+from pymongo import MongoClient
+from hostname import DB_URL
 
 UPLOAD_DIR = "ai_model/model/"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 # word_class_mapping = [['apple', 0], ['banana', 1], ['bicycle', 2], ['car', 3], ['cat', 4], ['dog', 5], ['guitar', 6], ['house', 7], ['star', 8], ['sword', 9], ['tent', 10], ['tree', 11]]
-word_class_mapping = [['apple',  0],  ['banana', 1], ['bench',  2], ['bicycle', 3], ['car', 4], ['cat', 5], ['dog', 6], ['elbow', 7], ['fish', 8], ['guitar', 9], ['hammer', 10], ['house', 11], ['ice cream', 12], ['moon', 13], ['pencil', 14], ['sailboat', 15], ['star', 16], ['sword', 17], ['t-shirt', 18], ['tent', 19], ['tree', 20], ['umbrella', 21], ['wine bottle', 22]]
+# word_class_mapping = [['apple',  0],  ['banana', 1], ['bench',  2], ['bicycle', 3], ['car', 4], ['cat', 5], ['dog', 6], ['elbow', 7], ['fish', 8], ['guitar', 9], ['hammer', 10], ['house', 11], ['ice cream', 12], ['moon', 13], ['pencil', 14], ['sailboat', 15], ['star', 16], ['sword', 17], ['t-shirt', 18], ['tent', 19], ['tree', 20], ['umbrella', 21], ['wine bottle', 22]]
+client = MongoClient(DB_URL)
+srv = client["mydatabase"]
+word_collection = srv["word_mapping"]
+# model_collection = srv["fs.files"]
+# fs = gridfs.GridFS(srv)
 
+def get_word_list():
+    """Fetch word list from the Flask server."""
+    list = []
+    try:
+        documents = word_collection.find()
+        for word in documents:
+            list.append([word['word'], word['class']])
+        return list
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching word list: {e}")
+        return list
+
+word_class_mapping = get_word_list()
 
 model = getModel()
+# print("model: ", getModel())
 
 @csrf_exempt
 def download_model(request):
@@ -52,7 +76,7 @@ def predict(request):
 
             with torch.no_grad():
                 processed_data = process(data)
-                
+                # print("data : ", data)
                 # print("model : ", model)
                 # print("processed_data : ", processed_data)
                 for images, labels in processed_data:
@@ -62,7 +86,7 @@ def predict(request):
                     # print("images : ",images)
                     # print("labels : ",labels)
                     output = model(images)
-                    # print(output)
+                    # print("output : ",output)
                     predicted_class = word_class_mapping[torch.argmax(output, dim=1).item()][0]
                     # print("prediction done")
                 return JsonResponse({

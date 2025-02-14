@@ -1,0 +1,27 @@
+{
+  "words": [
+      {"word": "apple", "class": 0},
+      {"word": "banana", "class": 1},
+      {"word": "bench", "class": 2},
+      {"word": "bicycle", "class": 3},
+      {"word": "car", "class": 4},
+      {"word": "cat", "class": 5},
+      {"word": "dog", "class": 6},
+      {"word": "elbow", "class": 7},
+      {"word": "fish", "class": 8},
+      {"word": "guitar", "class": 9},
+      {"word": "hammer", "class": 10},
+      {"word": "house", "class": 11},
+      {"word": "ice cream", "class": 12},
+      {"word": "moon", "class": 13},
+      {"word": "pencil", "class": 14},
+      {"word": "sailboat", "class": 15},
+      {"word": "star", "class": 16},
+      {"word": "sword", "class": 17},
+      {"word": "t-shirt", "class": 18},
+      {"word": "tent", "class": 19},
+      {"word": "tree", "class": 20},
+      {"word": "umbrella", "class": 21},
+      {"word": "wine bottle", "class": 22}
+  ]
+}
