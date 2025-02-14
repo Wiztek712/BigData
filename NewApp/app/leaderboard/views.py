@@ -42,7 +42,7 @@ def leaderboard(request):
     # print('users : ',users)
 
     # Convert game user_id to string
-    player_data = list(games_collection.find({"user_id": user_id}))
+    player_data = list(games_collection.find({"user_id": user_id}).sort("score", -1))
     for game in player_data:
         game['game_id'] = game['_id']
     # print('player_data : ', player_data)    
